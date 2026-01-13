@@ -1,0 +1,37 @@
+#define SQLITECPP_COMPILE_DLL
+#include "SQLiteCpp/SQLiteCpp.h"
+#include "crow.h"
+int main()
+{
+	try {
+		SQLite::Database db("ChatProject.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
+		db.exec("CREATE TABLE User(Id AUTOINCREMENT INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NOT NULL)");
+		db.exec("CREATE TABLE SignUp(Id AUTOINCREMENT INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NULL)");
+		db.exec("CREATE TABLE Contact(Id AUTOINCREMENT INTEGER PRIMARY KEY NOT NULL, UserId1 NOT NULL, FOREIGN KEY (UserId1) REFERENCES User(Id),UserId2 NOT NULL, FOREIGN KEY (UserId2) REFERENCES User(Id), typeId INTEGER NOT NULL, FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
+		db.exec("CREATE TABLE Chat(Id AUTOINCREMENT INTEGER PRIMARY KEY, UserId1 INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id),UserId2 INTEGER FOREIGN KEY, typeId INTEGER NOT NULL, FOREIGN KEY(typeId) REFERENCES Roles(Id))");
+		db.exec("CREATE TABLE Message(Id AUTOINCREMENT INTEGER PRIMARY KEY, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id), chatId INTEGER NOT NULL, Msg TEXT NOT NULL, ReplyId INTEGER  NOT NULL, FOREIGN KEY (ReplyId) REFERENCES Message(Id), SendDate DATE NOT NULL )");
+		db.exec("CREATE TABLE Roles(Id AUTOINCREMENT INTEGER PRIMARY KEY, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id), Name TEXT NOT NULL  )");
+		db.exec("CREATE TABLE UserChat(Id AUTOINCREMENT INTEGER PRIMARY KEY, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id), chatId INTEGER NOT NULL, FOREIGN KEY(chatId) REFERENCES Chat(Id), typeId INTEGER NOT NULL, FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
+	}
+	catch(std::exception& e)
+	{
+		std::cout << "sqlite " << e.what() << std::endl;
+	}
+	return 0;
+}
+/*
+
+message
+userid
+replyid
+chatid
+forwardid (chat?)
+
+senddate
+editdate
+
+
+
+
+
+*/
