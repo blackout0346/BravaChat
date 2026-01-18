@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using RestSharp;
@@ -12,12 +13,13 @@ namespace RestApi
     public partial class MainWindow : Window
     {
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
-
+        string inputsName;
+        string inputsPassword;
 
         public MainWindow()
         {
             InitializeComponent();
-            
+       
         }
         struct myResponse
         {
@@ -44,44 +46,49 @@ namespace RestApi
 
                 var key = response.GetHeaderValue("secretkey");
 
-                output.Content = data.name + ' ' + data.price.ToString() + " " + key;
+                //output.Content = data.name + ' ' + data.price.ToString() + " " + key;
+            }
+        }
+        private void setinput()
+        {
+            inputsName = inputName.Text.Trim();
+            inputsPassword = inputPassword.Text.Trim();
+            if (inputPassword.Text == " " || inputPassword.Text == " ")
+            {
+                MessageBox.Show($" {inputsName},{inputsPassword}Введите логин и пароль");
+                return;
+            }
+            else
+            {
+                SETLOGIN(inputsName, inputsPassword);
+                inputName.Text = " ";
+                inputPassword.Text = " ";
+                MessageBox.Show($" {inputsName},{inputsPassword}Что тут внутри?");
+            }
+        }
+        private async void SETLOGIN(string inputsName, string inputsPassword)
+        {
+
+            var logins = new Login
+            {
+                name = inputsName,
+                password = inputsPassword
+            };
+            RestRequest PostRequest = new RestRequest("/login", Method.Post);
+            var jsonbody = JsonSerializer.Serialize(logins);
+            PostRequest.AddJsonBody(jsonbody);
+            RestResponse response = await restClient.ExecuteAsync(PostRequest);
+            if (response.IsSuccessful)
+            {
+                MessageBox.Show($"{response}");   
             }
         }
         private async void click_Click(object sender, RoutedEventArgs e)
         {
             //GetRequest();
-
-            //if (inputName != null && inputPassword != null)
-            //{
-            //    SETLOGIN();
-            //}
-            //else
-            //{
-            //    return;
-            //}
-            string name = inputName.Text;
-            string password = inputPassword.Text;
-            Login login = new Login() { name=name, password = password};
-            RestRequest PostRequest = new RestRequest("/login", Method.Post);
-            PostRequest.AddJsonBody(login.ToString());
-            RestResponse response = await restClient.ExecuteAsync(PostRequest);
-            if (response.IsSuccessful)
-            {
-                output.Content = name + " " + password;
-            }
+            setinput();
         }
-        private async void SETLOGIN()
-        {
-            string name = inputName.Text;
-            string password = inputPassword.Text;
-            RestRequest PostRequest = new RestRequest("/login", Method.Post);
-            PostRequest.AddJsonBody(name, password);
-            RestResponse response = await restClient.ExecuteAsync(PostRequest);
-            if (response.IsSuccessful)
-            {
-                output.Content = name + " " + password;
-            }
-        }
+       
 
     }
 }
