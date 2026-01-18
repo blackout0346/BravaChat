@@ -1,2 +1,0 @@
-C:\Users\student\Desktop\serverCPP\serverCPP\x64\Debug\serverCPP.vcxproj.Up2Date
-C:\Users\ittop\Desktop\serverCPP\serverCPP\x64\Debug\serverCPP.vcxproj.Up2Date
