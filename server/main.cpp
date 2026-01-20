@@ -4,9 +4,11 @@ using namespace std;
 
 int main()
 {
+	
     crow::SimpleApp app;
 	Route route;
-	//route.GET();
 	route.POST();
+	route.GET();
+
 
 }

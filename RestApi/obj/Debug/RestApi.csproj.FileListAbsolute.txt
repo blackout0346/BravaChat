@@ -109,3 +109,7 @@ C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.csproj.CoreCompi
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.csproj.Up2Date
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.exe
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.pdb
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\Contacts.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\Contacts.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\authification.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\authification.baml

@@ -3,7 +3,7 @@
 void DataStorage::createDatabase()
 {
 	try {
-		SQLite::Database db("ChatProject.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
+		
 		db.exec("CREATE TABLE User(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NOT NULL)");
 		db.exec("CREATE TABLE Roles(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id))");
 		db.exec("CREATE TABLE SignUp(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NOT NULL)");
@@ -16,4 +16,9 @@ void DataStorage::createDatabase()
 	{
 		std::cout << "sqlite " << e.what() << std::endl;
 	}
+
+}
+
+void DataStorage::AddinDatabase()
+{
 }

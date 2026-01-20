@@ -5,7 +5,10 @@
 class DataStorage
 {
 private:
+	SQLite::Database db;
 public:
+
 	void createDatabase();
+	void AddinDatabase();
 };
 

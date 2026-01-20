@@ -13,14 +13,8 @@ namespace RestApi
     public partial class MainWindow : Window
     {
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
-        string inputsName;
-        string inputsPassword;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-       
-        }
+        string inputsName = null;
+        string inputsPassword = null;
         struct myResponse
         {
             public string name { get; set; }
@@ -31,6 +25,12 @@ namespace RestApi
             public string name { get; set; }
             public string password { get; set; }
         }
+        public MainWindow()
+        {
+            InitializeComponent();
+       
+        }
+ 
         private async void GetRequest()
         {
     
@@ -53,18 +53,21 @@ namespace RestApi
         {
             inputsName = inputName.Text.Trim();
             inputsPassword = inputPassword.Text.Trim();
-            if (inputPassword.Text == " " || inputPassword.Text == " ")
+            if (!string.IsNullOrEmpty(inputsName) && !string.IsNullOrEmpty(inputsPassword))
             {
-                MessageBox.Show($" {inputsName},{inputsPassword}Введите логин и пароль");
-                return;
+                SETLOGIN(inputsName, inputsPassword);
+                MessageBox.Show($" {inputsName},{inputsPassword}Что тут внутри?");
+                inputName.Text = " ";
+                inputPassword.Text = " ";
             }
             else
             {
-                SETLOGIN(inputsName, inputsPassword);
+                MessageBox.Show($" {inputsName},{inputsPassword}Введите логин и пароль");
                 inputName.Text = " ";
                 inputPassword.Text = " ";
-                MessageBox.Show($" {inputsName},{inputsPassword}Что тут внутри?");
+                return;
             }
+   
         }
         private async void SETLOGIN(string inputsName, string inputsPassword)
         {
@@ -80,15 +83,24 @@ namespace RestApi
             RestResponse response = await restClient.ExecuteAsync(PostRequest);
             if (response.IsSuccessful)
             {
-                MessageBox.Show($"{response}");   
+                Contacts contacts = new Contacts();
+                contacts.Show();
+                var data = response.StatusCode;
+                MessageBox.Show($"{data}");   
             }
         }
         private async void click_Click(object sender, RoutedEventArgs e)
         {
             //GetRequest();
             setinput();
+            
         }
-       
 
+        private void link_Click(object sender, RoutedEventArgs e)
+        {
+            authification authification = new authification();
+            authification.Show();
+            
+        }
     }
 }
