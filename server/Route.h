@@ -1,20 +1,19 @@
 #pragma once
 #include <string>
-#include "crow.h"
+#include "crow_all.h"
 #include <iostream>
-
-
+#include "DataStorage.h"
+#include"fmt/core.h"
 using namespace std;
 class Route
 {
 private:
 
-	crow::json::rvalue x;
 	crow::SimpleApp app;
-	string name;
-	string email;
-	string login;
+
+
 public:
+	DataStorage db;
 	void GET();
 	void POST();
 	void DELETEV();

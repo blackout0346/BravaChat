@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-	
+	DataStorage db;
     crow::SimpleApp app;
 	Route route;
 	route.POST();

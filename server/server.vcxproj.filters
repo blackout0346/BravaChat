@@ -33,4 +33,9 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="vcpkg.json">
+      <Filter>Файлы заголовков</Filter>
+    </None>
+  </ItemGroup>
 </Project>

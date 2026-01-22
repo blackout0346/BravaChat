@@ -2,13 +2,18 @@
 #define SQLITECPP_COMPILE_DLL
 #include "SQLiteCpp/SQLiteCpp.h"
 #include <iostream>
+#include <string>
+
+using namespace std;
 class DataStorage
 {
 private:
-	SQLite::Database db;
-public:
 
+public:
+	DataStorage();
 	void createDatabase();
-	void AddinDatabase();
+	void AddinDatabase(string sqlquery);
+	void DeleteDatabase(string sqlquery);
+	void EditDatabase(string sqlquery);
 };
 

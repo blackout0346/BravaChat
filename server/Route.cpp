@@ -38,12 +38,17 @@ void Route::GET()
 
 void Route::POST()
 {
-    CROW_ROUTE(app, "/auth").methods("POST"_method)([](const crow::request& req) {
+    CROW_ROUTE(app, "/auth").methods("POST"_method)([=](const crow::request& req) {
+        int id = 1;
+
         crow::json::rvalue x = crow::json::load(req.body);
         cout << x["Names"] << endl;
         cout << x["emails"] << endl;
         cout << x["passwords"] << endl;
         cout << x["numbers"] << endl;
+        string quaery = fmt::format("INSERT INTO Auth(Id, Login, NumberPhone, Email , Password)VALUE({ }, '{ }', '{ }', '{ }', '{ }')", id, x["Names"], x["Login"], x["NumberPhone"], x["Password"]);
+        id++;
+        db.AddinDatabase(quaery);
         cout << " I got auth!" << endl;
         return 200;
         });
