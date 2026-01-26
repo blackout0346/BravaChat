@@ -7,13 +7,14 @@ void DataStorage::createDatabase()
 {
 
 	try {
-		db.exec("CREATE TABLE Auth(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Login TEXT NOT NULL, NumberPhone INTEGER NOT NULL, Email TEXT NOT NULL , Password TEXT NOT NULL)");
-		db.exec("CREATE TABLE User(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, LoginId TEXT NOT NULL, PasswordId TEXT NOT NULL,  FOREIGN KEY(LoginId) REFERENCES Auth(Login), FOREIGN KEY(PasswordId) REFERENCES Auth(Password)");
-		db.exec("CREATE TABLE Roles(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id))");
-		db.exec("CREATE TABLE SignUp(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NOT NULL)");
+		db.exec("CREATE TABLE Auth(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, Login TEXT NOT NULL, NumberPhone INTEGER NOT NULL, Email TEXT NOT NULL , Password TEXT NOT NULL)");
+		db.exec("CREATE TABLE User(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, LoginId TEXT NOT NULL, PasswordId TEXT NOT NULL, PicturePath TEXT NULL,  FOREIGN KEY(LoginId) REFERENCES Auth(Login), FOREIGN KEY(PasswordId) REFERENCES Auth(Password))");
+		db.exec("CREATE TABLE Roles(Id INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL, Name TEXT NOT NULL, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id))");
+		db.exec("CREATE TABLE SignUp(Id INTEGER PRIMARY KEY AUTOINCREMENT   NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath TEXT NOT NULL)");
 		db.exec("CREATE TABLE Contact(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, UserId1 INTEGER NOT NULL,UserId2 INTEGER NOT NULL, typeId INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id), FOREIGN KEY(UserId2) REFERENCES User(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
-		db.exec("CREATE TABLE Chat(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, UserId1 INTEGER NOT NULL, UserId2 INTEGER NOT NULL,typeId INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id),  FOREIGN KEY(UserId2) REFERENCES User(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id))");
-		db.exec("CREATE TABLE Message(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, UserId INTEGER NOT NULL , SendDate DATE NOT NULL, chatId INTEGER NOT NULL, Msg TEXT NOT NULL, ReplyId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id), FOREIGN KEY(chatId) REFERENCES chat(Id),  FOREIGN KEY (ReplyId) REFERENCES Message(Id) )");
+		db.exec("CREATE TABLE Chat(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, UserId1 INTEGER NOT NULL, UserId2 INTEGER NOT NULL,typeId INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id),  FOREIGN KEY(UserId2) REFERENCES User(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id))");
+		db.exec("CREATE TABLE MessageSET(Id INTEGER PRIMARY KEY AUTOINCREMENT Msg TEXT NOT NULL,)");
+		db.exec("CREATE TABLE MessageGET(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, UserId INTEGER NOT NULL, SendDate DATETIME DEFAULT CURRENT_TIMESTAMP, chatId INTEGER NOT NULL, MsgId INTEGER NOT NULL, ReplyId INTEGER NULL, FOREIGN KEY(UserId) REFERENCES User(Id), FOREIGN KEY(chatId) REFERENCES chat(Id),  FOREIGN KEY (ReplyId) REFERENCES MessageSET(Id),FOREIGN KEY (MsgId) REFERENCES MessageSET(Msg) )");
 		db.exec("CREATE TABLE UserChat(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, UserId INTEGER NOT NULL,chatId INTEGER NOT NULL, typeId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id),  FOREIGN KEY(chatId) REFERENCES Chat(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
 	}
 	catch (exception& e)
@@ -23,16 +24,31 @@ void DataStorage::createDatabase()
 
 }
 
+void DataStorage::SelectDatabase(string sqlquery)
+{
+	try {
+		db.exec(sqlquery);
+		auto va = db.exec("SELECT * FROM Auth");
+		cout << va << endl;
+	}
+	catch (exception& e)
+	{
+		cout << "Added Error: " << e.what() << endl;
+	}
+
+}
+
+
 void DataStorage::AddinDatabase(string sqlquery)
 {
 	try {
 		db.exec(sqlquery);
-		db.exec("SELECT * FROM Auth");
-
+		auto va = db.exec("SELECT * FROM Auth");
+		cout << va << endl;
 	}
 	catch(exception& e)
 	{
-		cout << "Added data " << e.what() << endl;
+		cout << "Added Error: " << e.what() << endl;
 	}
 
 }

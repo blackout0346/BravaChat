@@ -10,8 +10,8 @@ class DataStorage
 private:
 
 public:
-	DataStorage();
 	void createDatabase();
+	void SelectDatabase(string sqlquery);
 	void AddinDatabase(string sqlquery);
 	void DeleteDatabase(string sqlquery);
 	void EditDatabase(string sqlquery);

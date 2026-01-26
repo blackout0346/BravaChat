@@ -26,12 +26,12 @@ namespace RestApi
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         struct AuthificationData
         {
-            public string Names {  get; set; }
+            public string Login {  get; set; }
             public string emails { get; set; }
             public string passwords { get; set; }
             public string numbers { get; set; }
         }
-        string Name = null;
+        private string Login = null;
         private string Email = null;
         private string Password = null;
         private string Number = null;
@@ -45,26 +45,27 @@ namespace RestApi
 
         private void setData()
         {
-            Name = inputName.Text;
+            Login = inputName.Text;
             Email = inputEmail.Text.Trim();
             Password = inputPassword.Text.Trim();
             Number = inputNumber.Text.Trim();
             if (Number.Length > 15)
             {
                 MessageBox.Show("Некорректный номер");
-                return;
+          
             }
-            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
+            if (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
             {
-                AuthResponse(Name, Email, Password, Number);
+                AuthResponse(Login, Email, Password, Number);
                 inputName.Text = " ";
                 inputPassword.Text = " ";
                 inputEmail.Text = " ";
                 inputNumber.Text = " ";
+                return;
             }
             else
             {
-                MessageBox.Show($" {Name},{Email}, {Number}, {Password}Введите логин и пароль");
+                MessageBox.Show($" {Login},{Email}, {Number}, {Password}Введите логин и пароль");
                 MessageBox.Show("Введите все поля");
                 inputName.Text = " ";
                 inputPassword.Text = " ";
@@ -79,7 +80,7 @@ namespace RestApi
         {
             var NewAuthUser = new AuthificationData
             {
-                Names = name,
+                Login = name,
                 emails = email,
                 passwords = password,
                 numbers = number

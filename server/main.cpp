@@ -7,6 +7,7 @@ int main()
 	DataStorage db;
     crow::SimpleApp app;
 	Route route;
+	db.createDatabase();
 	route.POST();
 	route.GET();
 
