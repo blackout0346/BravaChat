@@ -6,7 +6,6 @@ SQLite::Database db("chatMessager.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CR
 void DataStorage::createDatabase()
 {
 
-
 	try {
 		db.exec("CREATE TABLE Auth(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, Login TEXT NOT NULL, NumberPhone INTEGER NOT NULL, Email TEXT NOT NULL , Password TEXT NOT NULL)");
 		db.exec("CREATE TABLE User(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, LoginId INTEGER NOT NULL, PasswordId INTEGER NOT NULL, PicturePath BLOB NULL,  FOREIGN KEY(LoginId) REFERENCES Auth(Login), FOREIGN KEY(PasswordId) REFERENCES Auth(Password))");
