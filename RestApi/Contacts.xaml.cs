@@ -29,7 +29,7 @@ namespace RestApi
         }
         private async void ViewContact()
         {
-            RestRequest ContactRequest = new RestRequest("/Users", Method.Get);
+            RestRequest ContactRequest = new RestRequest("/Contact", Method.Get);
             RestResponse ContactResponse = await restClient.ExecuteAsync(ContactRequest);
             if (ContactResponse.IsSuccessful)
             {
