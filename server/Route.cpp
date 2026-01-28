@@ -3,31 +3,30 @@
 void Route::GET()
 {
 
-    CROW_ROUTE(app, "/contact").methods("GET"_method)([=](const crow::request req)
+  /*  CROW_ROUTE(app, "/contact").methods("GET"_method)([=](const crow::request req)
         {
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
 
                 ostringstream query;
-                query << "SELECT C.UserId1, C.UserId2, C.TypeId FROM Contact AS C JOIN Auth AS A ON A.Login = C.UserId1 JOIN Auth AS A ON A.Login = C.UserId2 JOIN Roles AS R ON R.Id = C.TypeId";
-                db.SelectDatabase(query.str());
+                query << "SELECT C.UserId1,U.Login, C.UserId2 FROM Contact AS CJOIN Users AS U ON U.Id = C.UserId1";
+                db.GetQueryDatabase(query.str());
             }
             catch(exception& e)
             {
                 cout << "Error /contact: " << e.what() << endl;
             }
             return 200;
-        });
+        });*/
     CROW_ROUTE(app, "/chat").methods("GET"_method)([=](const crow::request req)
         {
             try {
             crow::json::rvalue x = crow::json::load(req.body);
-
             cout << x["ChatName"] << endl;
             cout << x["username"] << endl;
             ostringstream  query;
-            query << "SELECT C.UserId1, C.UserId2, C.TypeId FROM Chat AS C JOIN Auth AS A ON A.Login = C.UserId1 JOIN Auth AS A ON A.Login = C.UserId2 JOIN Roles AS R ON R.Id = C.TypeId";
-            db.SelectDatabase(query.str());
+            query << "SELECT UC.chatId, U.Login, TC.typeName FROM UserChat AS UC JOIN Users AS U ON U.Id = UC.UserId JOIN Chats AS C ON C.Id = UC.chatIdJOIN TypeChat AS TC";
+            db.SelectQueryDatabase(query.str());
             }
             catch (exception& e)
             {
@@ -45,7 +44,7 @@ void Route::GET()
                 cout << x["message"] << endl;
                 ostringstream  query;
                 query << "SELECT M.Id, M.UserId, M.SendDate, M.ChatId, M.MsgId, M.ReplyId FROM MessageGET AS M JOIN User AS U ON U.id = M.UserId JOIN Chat AS C ON C.id = M.ChatId";
-                db.SelectDatabase(query.str());
+                db.SelectQueryDatabase(query.str());
             }
             catch (exception& e)
             {
@@ -54,7 +53,7 @@ void Route::GET()
             return 200;
         });
 
-    PORT();
+
 }
 
 void Route::POST()
@@ -70,12 +69,13 @@ void Route::POST()
             cout << x["passwords"] << endl;
 
             ostringstream  query;
-            query << "INSERT INTO Auth( Login, NumberPhone, Email, Password) VALUES('"
+            query << "INSERT INTO Users(Login, NumberPhone, Email, Password) VALUES('"
                 << x["Login"].s() << "', '"
                 << x["numbers"].s() << "','"
                 << x["emails"].s() << "','"
+         /*       << x["Picture"].s() << "','"*/
                 << x["passwords"].s() << "')";
-            db.AddinDatabase(query.str());
+            db.GetQueryDatabase(query.str());
             cout << " I got auth!" << endl;
 
         }
@@ -84,21 +84,29 @@ void Route::POST()
         }
         return 200;
         });
-    CROW_ROUTE(app, "/login").methods("POST"_method)([=](const crow::request& req) {
+    CROW_ROUTE(app, "/login").methods("POST"_method)([&](const crow::request& req) {
         try {
 
        
         crow::json::rvalue x = crow::json::load(req.body);
-        cout << x["name"] << endl;
-        cout << x["password"] << endl;
+        if (!x)
+        {
+            return crow::response(400, "invalid json");
+        }
+        if (!x.has("Login") || !x.has("password"))
+        {
+            return crow::response(400, "invalid input");
+        }
+        
+        
         ostringstream  query;
-        query << "SELECT * FROM User WHERE name = " << x["name"].s() << "AND password = " << x["password"] << " OR NumberPhone = " << x["NumberPhone"] << ";";
-        db.DeleteDatabase(query.str());
+        query << "SELECT U.Login, U.NumberPhone, U.Email, U.Password, U.PicturePath FROM Users AS U WHERE U.Login = "<<x["Login"].s() << " AND U.Password = " <<x["password"].s();
+        db.SelectQueryDatabase(query.str());
         }
         catch (exception& e) {
-            cout << "error /login" << e.what() << endl;
+            cout << "error /login:" << e.what() << endl;
         }
-        return 200;
+        return crow::response(200, "OK");
         });
     CROW_ROUTE(app, "/createchat").methods("POST"_method)([=](const crow::request& req) {
         try{
@@ -107,11 +115,7 @@ void Route::POST()
         cout << x["users"] << endl;
         cout << " I got chat!" << endl;
         ostringstream query;
-        ostringstream query2;
-        query2 << "INSERT INTO Roles(Name, UserId) VALUES('" <<x["RoleName"]<<"'"<<"(SELECT Id FROM Users WHERE Id =" << x["Names"] << "))";
-        query << "SELECT C.UserId1, C.UserId2, C.typeId FROM Chat AS C JOIN User AS U ON U.Id = C.UserId1 JOIN User AS U ON U.Id = C.UserId2 JOIN Roles AS R ON R.Id = C.typeId " << ";";
-        db.AddinDatabase(query.str());
-        db.AddinDatabase(query2.str());
+        db.GetQueryDatabase(query.str());
         }
         catch (exception& e) {
             cout << "error /createchat" << e.what() << endl;
@@ -122,19 +126,17 @@ void Route::POST()
         {
             try{
             crow::json::rvalue x = crow::json::load(req.body);
-
-            cout << x["name"] << endl;
             cout << x["message"] << endl;
             ostringstream  query;
-            query << "INSERT INTO MessageSET(Msg)VALUES('" << x["message"] << "')";
-            db.AddinDatabase(query.str());
+            query << "INSERT INTO Message(Message)VALUES('" << x["message"] << "')";
+            db.GetQueryDatabase(query.str());
             }
             catch (exception& e) {
             cout << "error /message" << e.what() << endl;
             }
             return 200;
         });
-    PORT();
+
 }
 void Route::DELETEV()
 {
@@ -142,10 +144,10 @@ void Route::DELETEV()
         {
             try{
             crow::json::rvalue x = crow::json::load(req.body);
-            cout << x["name"] << endl;
+            cout << x["Login"] << endl;
             ostringstream  query;
-            query << "DELETE FROM User WHERE id = " << x["name"].s() << ";";
-            db.DeleteDatabase(query.str());
+            query << "DELETE FROM User WHERE id = " << x["Login"].s() << ";";
+            db.GetQueryDatabase(query.str());
             }
             catch (exception& e)
             {
@@ -161,10 +163,9 @@ void Route::DELETEV()
                 crow::json::rvalue x = crow::json::load(req.body);
                 cout << x["message"] << endl;
 
-                query << "DELETE FROM MessageSET WHERE Id = " << x["message"] << ";";
-                query2 << "DELETE FROM MessageGET WHERE Id ="<<x["message"] << ";";
-                db.DeleteDatabase(query.str());
-                db.DeleteDatabase(query2.str());
+                query << "DELETE FROM Message WHERE Id = " << x["message"] << ";";
+
+                db.GetQueryDatabase(query.str());
             }
             catch (exception& e)
             {
@@ -173,7 +174,7 @@ void Route::DELETEV()
 
             return 200;
         });
-    PORT();
+
 }
 void Route::PORT()
 {
