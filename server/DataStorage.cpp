@@ -7,15 +7,14 @@ void DataStorage::createDatabase()
 {
 
 	try {
-		db.exec("CREATE TABLE Auth(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, Login TEXT NOT NULL, NumberPhone INTEGER NOT NULL, Email TEXT NOT NULL , Password TEXT NOT NULL)");
-		db.exec("CREATE TABLE User(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, LoginId INTEGER NOT NULL, PasswordId INTEGER NOT NULL, PicturePath BLOB NULL,  FOREIGN KEY(LoginId) REFERENCES Auth(Login), FOREIGN KEY(PasswordId) REFERENCES Auth(Password))");
-		db.exec("CREATE TABLE Roles(Id INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL, Name TEXT NOT NULL, UserId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id))");
-		db.exec("CREATE TABLE SignUp(Id INTEGER PRIMARY KEY AUTOINCREMENT   NOT NULL, Name TEXT NOT NULL, Login TEXT NOT NULL, PicturePath  BLOB NULL)");
-		db.exec("CREATE TABLE Contact(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, UserId1 INTEGER NOT NULL,UserId2 INTEGER NOT NULL, typeId INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id), FOREIGN KEY(UserId2) REFERENCES User(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
-		db.exec("CREATE TABLE Chat(Id INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL, UserId1 INTEGER NOT NULL, UserId2 INTEGER NOT NULL,typeId INTEGER NOT NULL, FOREIGN KEY(UserId1) REFERENCES User(Id),  FOREIGN KEY(UserId2) REFERENCES User(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id))");
-		db.exec("CREATE TABLE MessageSET(Id INTEGER PRIMARY KEY AUTOINCREMENT, Msg TEXT NOT NULL)");
-		db.exec("CREATE TABLE MessageGET(Id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL, UserId INTEGER NOT NULL, SendDate DATETIME DEFAULT CURRENT_TIMESTAMP, chatId INTEGER NOT NULL, MsgId INTEGER NOT NULL, ReplyId INTEGER NULL, FOREIGN KEY(UserId) REFERENCES User(Id), FOREIGN KEY(chatId) REFERENCES chat(Id),  FOREIGN KEY (ReplyId) REFERENCES MessageSET(Id),FOREIGN KEY (MsgId) REFERENCES MessageSET(Id) )");
-		db.exec("CREATE TABLE UserChat(Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, UserId INTEGER NOT NULL,chatId INTEGER NOT NULL, typeId INTEGER NOT NULL, FOREIGN KEY(UserId) REFERENCES User(Id),  FOREIGN KEY(chatId) REFERENCES Chat(Id),  FOREIGN KEY(typeId) REFERENCES Roles(Id) )");
+		db.exec("CREATE TABLE Chats (Id	INTEGER,typeId	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(typeId) REFERENCES TypeChat(Id)); ");
+		db.exec("CREATE TABLE Users (Id	INTEGER NOT NULL,Login	TEXT NOT NULL,NumberPhone	INTEGER NOT NULL,Email	TEXT NOT NULL,Password	TEXT NOT NULL,PicturePath	BLOB,PRIMARY KEY(Id AUTOINCREMENT)); ");
+		db.exec("CREATE TABLE Roles(Id	INTEGER NOT NULL,Name	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT)); ");	
+		db.exec("CREATE TABLE Contact (Id	INTEGER NOT NULL,UserId1	INTEGER NOT NULL,UserId2	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(UserId1) REFERENCES Users(Id),FOREIGN KEY(UserId2) REFERENCES Users(Id)); ");
+		db.exec("CREATE TABLE TypeChat (Id	INTEGER,typeName	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT)); ");
+		db.exec("CREATE TABLE GroupChat (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,typeId	INTEGER NOT NULL,NameChat	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(typeId) REFERENCES Roles(Id)); ");
+		db.exec("CREATE TABLE Message (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,SendDate	DATETIME DEFAULT CURRENT_TIMESTAMP,chatId	INTEGER NOT NULL,Message	TEXT NOT NULL,ReplyId	INTEGER,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(ReplyId) REFERENCES Message(Id),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id)); ");
+		db.exec("CREATE TABLE UserChat (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,chatId	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id)); ");
 		cout << "sqlite create database "<< endl;
 	}
 	catch (exception& e)
@@ -25,53 +24,25 @@ void DataStorage::createDatabase()
 
 }
 
-void DataStorage::SelectDatabase(string sqlquery)
+void DataStorage::SelectQueryDatabase(string sqlquery)
 {
 	try {
-		db.exec(sqlquery);
-		auto va = db.exec("SELECT * FROM Auth");
-		cout << va << endl;
+		db.execAndGet(sqlquery);
 	}
 	catch (exception& e)
 	{
-		cout << "Added Error: " << e.what() << endl;
+		cout << "select data " << e.what() << endl;
 	}
-
 }
 
 
-void DataStorage::AddinDatabase(string sqlquery)
-{
-	try {
-		db.exec(sqlquery);
-		auto va = db.exec("SELECT * FROM Auth");
-		cout << va << endl;
-	}
-	catch (exception& e)
-	{
-		cout << "Added Error: " << e.what() << endl;
-	}
-
-}
-
-void DataStorage::DeleteDatabase(string sqlquery)
+void DataStorage::GetQueryDatabase(string sqlquery)
 {
 	try {
 		db.exec(sqlquery);
 	}
 	catch (exception& e)
 	{
-		cout << "Delete data " << e.what() << endl;
-	}
-}
-
-void DataStorage::EditDatabase(string sqlquery)
-{
-	try {
-		db.exec(sqlquery);
-	}
-	catch (exception& e)
-	{
-		cout << "Edit data " << e.what() << endl;
+		cout << "get data " << e.what() << endl;
 	}
 }

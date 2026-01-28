@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using RestSharp;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using RestSharp;
+using System.Windows.Markup;
 
 namespace RestApi
 {
@@ -20,9 +22,9 @@ namespace RestApi
             public string name { get; set; }
             public int price { get; set; }
         }
-        struct Login
+        struct Logins
         {
-            public string name { get; set; }
+            public string Login { get; set; }
             public string password { get; set; }
         }
         public MainWindow()
@@ -72,21 +74,28 @@ namespace RestApi
         private async void SETLOGIN(string inputsName, string inputsPassword)
         {
 
-            var logins = new Login
+            var logins = new Logins
             {
-                name = inputsName,
+                Login = inputsName,
                 password = inputsPassword
             };
             RestRequest PostRequest = new RestRequest("/login", Method.Post);
             var jsonbody = JsonSerializer.Serialize(logins);
             PostRequest.AddJsonBody(jsonbody);
             RestResponse response = await restClient.ExecuteAsync(PostRequest);
-            if (response.IsSuccessful)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 Contacts contacts = new Contacts();
                 contacts.Show();
-                var data = response.StatusCode;
-                MessageBox.Show($"{data}");   
+                 
+            }
+            else if(response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                MessageBox.Show("Неверный логин или пароль");
+            }
+            else
+            {
+                MessageBox.Show("Такого пользователя нет");
             }
         }
         private async void click_Click(object sender, RoutedEventArgs e)

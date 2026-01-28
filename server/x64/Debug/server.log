@@ -1,46 +1,4 @@
-﻿  DataStorage.cpp
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Exception.h(26,45): warning C4275: class "std::runtime_error", не являющийся dll-интерфейсом, использован в качестве базового для dll-интерфейса class "SQLite::Exception"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\stdexcept(100,19):
-       см. объявление "std::runtime_error"
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Exception.h(26,21):
-       см. объявление "SQLite::Exception"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(714,29): warning C4251: SQLite::Statement::mQuery: class "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\xstring(5127,29):
-       см. объявление "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(716,29): warning C4251: SQLite::Statement::mpPreparedStatement: class "std::shared_ptr<sqlite3_stmt>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(661,32):
-       см. объявление "std::shared_ptr<sqlite3_stmt>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(722,41): warning C4251: SQLite::Statement::mColumnNames: class "std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(722,18):
-       см. объявление "std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Column.h(231,33): warning C4251: SQLite::Column::mStmtPtr: class "std::shared_ptr<sqlite3_stmt>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Column"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(661,32):
-       см. объявление "std::shared_ptr<sqlite3_stmt>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(620,41): warning C4251: SQLite::Database::mSQLitePtr: class "std::unique_ptr<sqlite3,SQLite::Database::Deleter>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Database"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(620,10):
-       см. объявление "std::unique_ptr<sqlite3,SQLite::Database::Deleter>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(621,41): warning C4251: SQLite::Database::mFilename: class "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Database"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\xstring(5127,29):
-       см. объявление "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-  
-C:\Users\smira\source\repos\serverCPP\server\DataStorage.cpp(18,1): error C2059: синтаксическая ошибка: <<
-C:\Users\smira\source\repos\serverCPP\server\DataStorage.cpp(20,1): error C2059: синтаксическая ошибка: ==
-C:\Users\smira\source\repos\serverCPP\server\DataStorage.cpp(22,1): error C2059: синтаксическая ошибка: >>
-C:\Users\smira\source\repos\serverCPP\server\DataStorage.cpp(22,9): error C2177: слишком большая константа
-  Route.cpp
+﻿  Route.cpp
   Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
   - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
   - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
@@ -130,86 +88,74 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13021,24): warning C4267
 C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13037,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "Route.cpp")
   
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(8,1): error C2760: синтаксическая ошибка: непредвиденный элемент "<<". Ожидается "}"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(8,1): error C2059: синтаксическая ошибка: <<
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(9,17): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(10,57): error C2065: req: необъявленный идентификатор
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(16,13): error C2318: нет блока try, связанного с этим блоком catch
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(20,13): error C2562: Route::GET: функция типа "void", возвращающая значение
-      C:\Users\smira\source\repos\serverCPP\server\Route.cpp(3,13):
-       см. объявление "Route::GET"
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244: аргумент: преобразование "unsigned __int64" в "int", возможна потеря данных
+  (компиляция исходного файла "Route.cpp")
+      C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75):
+      контекст создания экземпляра шаблона (сначала самый старый)
+          C:\Users\smira\source\repos\serverCPP\server\Route.h(12,18):
+          выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Crow<>"
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14964,14):
+          во время компиляции функции-члена класс шаблон "void crow::Crow<>::run(void)"
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(186,13):
+              см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15001,1):
+          выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>"
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14385,14):
+          во время компиляции функции-члена класс шаблон "void crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::do_accept(void)"
+              C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14299,22):
+              см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::do_accept" в "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run"
+              C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15007,38):
+              см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run" в "crow::Crow<>::run"
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(186,13):
+              см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14398,19):
+          выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Connection<Adaptor,Handler>"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13927,14):
+          во время компиляции функции-члена класс шаблон "void crow::Connection<Adaptor,Handler>::do_read(void)"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
+              C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13664,34):
+              см. первую ссылку на "crow::Connection<Adaptor,Handler>::do_read" в "crow::Connection<Adaptor,Handler>::start::<lambda_1>::operator ()"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
   
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(21,10): error C2059: синтаксическая ошибка: )
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C3927: "->": конечный тип возвращаемого значения недопустим после оператора объявления, не относящегося к функции.
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C3484: синтаксическая ошибка: требуется "->" перед возвращающим типом
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C3613: отсутствует тип возвращаемого значения после "->" (предполагается int)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "template"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5): error C2061: синтаксическая ошибка: идентификатор "route"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(23,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(23,9): error C2143: синтаксическая ошибка: отсутствие ")" перед ";"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(23,9): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(30,6): error C2059: синтаксическая ошибка: )
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C3927: "->": конечный тип возвращаемого значения недопустим после оператора объявления, не относящегося к функции.
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C3484: синтаксическая ошибка: требуется "->" перед возвращающим типом
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C3613: отсутствует тип возвращаемого значения после "->" (предполагается int)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "template"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C2086: int app: переопределение
-      C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5):
-       см. объявление "app"
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(8277,25): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "Route.cpp")
+      C:\Users\smira\source\repos\serverCPP\server\crow_all.h(8277,25):
+      контекст создания экземпляра шаблона (сначала самый старый)
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14054,32):
+          выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::HTTPParser<crow::Connection<Adaptor,Handler>>"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(8261,14):
+          во время компиляции функции-члена класс шаблон "bool crow::HTTPParser<crow::Connection<Adaptor,Handler>>::feed(const char *,int)"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
+              C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,32):
+              см. первую ссылку на "crow::HTTPParser<crow::Connection<Adaptor,Handler>>::feed" в "crow::Connection<Adaptor,Handler>::do_read::<lambda_1>::operator ()"
+          with
+          [
+              Adaptor=crow::UnixSocketAdaptor,
+              Handler=crow::Crow<>
+          ]
   
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(31,5): error C2061: синтаксическая ошибка: идентификатор "route"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(32,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(32,5): error C2143: синтаксическая ошибка: отсутствие ")" перед ";"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(32,5): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(33,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(48,6): error C2059: синтаксическая ошибка: )
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C3927: "->": конечный тип возвращаемого значения недопустим после оператора объявления, не относящегося к функции.
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C3484: синтаксическая ошибка: требуется "->" перед возвращающим типом
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C3613: отсутствует тип возвращаемого значения после "->" (предполагается int)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "template"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C2086: int app: переопределение
-      C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5):
-       см. объявление "app"
-  
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(49,5): error C2061: синтаксическая ошибка: идентификатор "route"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(50,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(50,5): error C2143: синтаксическая ошибка: отсутствие ")" перед ";"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(50,5): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(57,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(60,13): error C2059: синтаксическая ошибка: catch
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(61,13): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(61,13): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(65,13): error C2059: синтаксическая ошибка: return
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(66,9): error C2059: синтаксическая ошибка: }
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(66,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "}"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(66,10): error C2059: синтаксическая ошибка: )
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C3927: "->": конечный тип возвращаемого значения недопустим после оператора объявления, не относящегося к функции.
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C3484: синтаксическая ошибка: требуется "->" перед возвращающим типом
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C3613: отсутствует тип возвращаемого значения после "->" (предполагается int)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C2143: синтаксическая ошибка: отсутствие ";" перед "template"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C2086: int app: переопределение
-      C:\Users\smira\source\repos\serverCPP\server\Route.cpp(22,5):
-       см. объявление "app"
-  
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(67,5): error C2061: синтаксическая ошибка: идентификатор "route"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(68,9): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(68,9): error C2143: синтаксическая ошибка: отсутствие ")" перед ";"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(68,9): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(83,10): error C2059: синтаксическая ошибка: )
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(85,11): error C4430: отсутствует спецификатор типа - предполагается int. Примечание. C++ не поддерживает int по умолчанию
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(86,1): error C2059: синтаксическая ошибка: }
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(86,1): error C2143: синтаксическая ошибка: отсутствие ";" перед "}"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(89,1): error C2143: синтаксическая ошибка: отсутствие ";" перед "{"
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(89,1): error C2447: {: отсутствует заголовок функции (возможно, используется формальный список старого типа)
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(127,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(140,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(163,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(178,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(205,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(237,9): error C2177: слишком большая константа
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(248,1): error C1004: непредвиденное обнаружение конца файла
-  Создание кода...
+  server.vcxproj -> C:\Users\smira\source\repos\serverCPP\x64\Debug\server.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.
