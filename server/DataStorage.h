@@ -10,10 +10,10 @@ class DataStorage
 private:
 
 public:
+	SQLite::Database db;
+	DataStorage() : db("chatMessager.db3", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE) {};
 	void createDatabase();
-	void SelectDatabase(string sqlquery);
-	void AddinDatabase(string sqlquery);
-	void DeleteDatabase(string sqlquery);
-	void EditDatabase(string sqlquery);
+	void SelectQueryDatabase(string sqlquery);
+	void GetQueryDatabase(string sqlquery);
 };
 
