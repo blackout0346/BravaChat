@@ -46,3 +46,12 @@ void DataStorage::GetQueryDatabase(string sqlquery)
 		cout << "get data " << e.what() << endl;
 	}
 }
+
+void DataStorage::InsertMessage(int userId, int chatId, string Messages)
+{
+	SQLite::Statment db("INSERT INTO Messages (userId, chatId, Message, SendDate, ReplyId, ForwardId) VALUES(?,?,? NULL, NULL)");
+	db.bind(0, userId);
+	db.bind(1, chatId);
+	db.bind(2, Messages);
+}
+
