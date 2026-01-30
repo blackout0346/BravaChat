@@ -15,5 +15,9 @@ public:
 	void createDatabase();
 	void SelectQueryDatabase(string sqlquery);
 	void GetQueryDatabase(string sqlquery);
+	void InsertMessage(int userId, int chatId, string Messages);
+	void InsertChat(int userId, int chatId, string Messages);
+	void InsertContact(int userId, int chatId, string Messages);
+	void InsertUsers(int userId, int chatId, string Messages);
 };
 
