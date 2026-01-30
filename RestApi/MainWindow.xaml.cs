@@ -1,4 +1,4 @@
-﻿using RestSharp;
+using RestSharp;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -87,9 +87,9 @@ namespace RestApi
             {
                 Contacts contacts = new Contacts();
                 contacts.Show();
-
+                 
             }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            else if(response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 MessageBox.Show("Неверный логин или пароль");
             }

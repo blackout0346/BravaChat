@@ -13,9 +13,10 @@ private:
 
 public:
 	DataStorage db;
-	void GET();
-	void POST();
-	void DELETEV();
+	void MessageRoute();
+	void ContactsRoute();
+	void UsersRoute();
+	void ChatRoute();
 	void PORT();
 	int GetUserIdFromToken(crow::request& req);
 };
