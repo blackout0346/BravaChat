@@ -15,5 +15,6 @@ public:
 	void createDatabase();
 	void SelectQueryDatabase(string sqlquery);
 	void GetQueryDatabase(string sqlquery);
+	
 };
 

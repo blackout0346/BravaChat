@@ -3,7 +3,7 @@
 void Route::GET()
 {
 
-  /*  CROW_ROUTE(app, "/contact").methods("GET"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/contact").methods("GET"_method)([=](const crow::request req)
         {
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
@@ -17,8 +17,8 @@ void Route::GET()
                 cout << "Error /contact: " << e.what() << endl;
             }
             return 200;
-        });*/
-    CROW_ROUTE(app, "/chat").methods("GET"_method)([=](const crow::request req)
+        });
+    CROW_ROUTE(app, "/chat").methods("GET"_method)([&](const crow::request req)
         {
             try {
             crow::json::rvalue x = crow::json::load(req.body);
@@ -35,7 +35,7 @@ void Route::GET()
 
             return 200;
         });
-    CROW_ROUTE(app, "/message").methods("GET"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/user/message").methods("GET"_method)([&](const crow::request req)
         {
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
@@ -58,7 +58,7 @@ void Route::GET()
 
 void Route::POST()
 {
-    CROW_ROUTE(app, "/auth").methods("POST"_method)([=](const crow::request& req) {
+    CROW_ROUTE(app, "/auth").methods("POST"_method)([&](const crow::request& req) {
 
 
         crow::json::rvalue x = crow::json::load(req.body);
@@ -126,21 +126,24 @@ void Route::POST()
         {
             try{
             crow::json::rvalue x = crow::json::load(req.body);
-            cout << x["message"] << endl;
+            if (!x)
+            {
+                return crow::response(400, "Invalid json");
+            }
             ostringstream  query;
-            query << "INSERT INTO Message(Message)VALUES('" << x["message"] << "')";
+            query << "INSERT INTO Message(UserId, chatId, Message) VALUES(1,1,Привет)'" << x["message"] << "')";
             db.GetQueryDatabase(query.str());
             }
             catch (exception& e) {
             cout << "error /message" << e.what() << endl;
             }
-            return 200;
+            return crow::response(200, "complete message");
         });
 
 }
 void Route::DELETEV()
 {
-    CROW_ROUTE(app, "/users/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/users/delete").methods("DELETE"_method)([&](const crow::request req)
         {
             try{
             crow::json::rvalue x = crow::json::load(req.body);
@@ -155,7 +158,7 @@ void Route::DELETEV()
             }
             return 200;
         });
-    CROW_ROUTE(app, "/message/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/message/delete").methods("DELETE"_method)([&](const crow::request req)
         {
             try {
                 ostringstream query;
@@ -181,4 +184,18 @@ void Route::PORT()
     app.port(18080).bindaddr("127.0.0.1")
         .multithreaded()
         .run();
+}
+
+int Route::GetUserIdFromToken(crow::request& req)
+{
+    auto auth = req.get_header_value("Authorization");
+    if (auth.empty())
+    {
+        throw runtime_error("no auth header");
+    }
+    if (auth.rfind("Bearer", 0) != 0)
+        throw runtime_error("invalid auth header");
+    string token = auth.substr(7);
+    SQLite::Statement q(db, "SELECT")
+    return 0;
 }

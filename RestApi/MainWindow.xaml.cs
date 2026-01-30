@@ -30,12 +30,12 @@ namespace RestApi
         public MainWindow()
         {
             InitializeComponent();
-       
+
         }
- 
+
         private async void GetRequest()
         {
-    
+
             RestRequest request = new RestRequest("/Users", Method.Get);
             request.AddHeader("username", "myname");
 
@@ -69,7 +69,7 @@ namespace RestApi
                 inputPassword.Text = " ";
                 return;
             }
-   
+
         }
         private async void SETLOGIN(string inputsName, string inputsPassword)
         {
@@ -87,9 +87,9 @@ namespace RestApi
             {
                 Contacts contacts = new Contacts();
                 contacts.Show();
-                 
+
             }
-            else if(response.StatusCode == HttpStatusCode.Unauthorized)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 MessageBox.Show("Неверный логин или пароль");
             }
@@ -102,14 +102,14 @@ namespace RestApi
         {
             //GetRequest();
             setinput();
-            
+
         }
 
         private void link_Click(object sender, RoutedEventArgs e)
         {
             authification authification = new authification();
             authification.Show();
-            
+
         }
     }
 }

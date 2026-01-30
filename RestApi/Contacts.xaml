@@ -5,14 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestApi"
         mc:Ignorable="d"
-        Title="Contacts" Height="450" Width="800">
+        Title="Contacts" Height="600" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200">
+            <ColumnDefinition Width="400">
+
             </ColumnDefinition>
             <ColumnDefinition>
             </ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="BoxContact"></ListBox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+
+        <Label FontSize="24" FontFamily="Century Gothic" Foreground="White" Content="BravaChat" Grid.Column="0" Grid.ColumnSpan="2" Width="auto" Height="50" Background="#FF6CBEE8" />
+        <Button x:Name="CreateChat" Grid.Column="0" Grid.ColumnSpan="1" Margin="149,10,182,15" Content="Выйти" Background="White"/>
+        <Button x:Name="Exit" Grid.Column="0" Grid.ColumnSpan="1" Margin="226,10,105,15" Content="Создать чать" Background="White"/>
+        <ListBox x:Name="BoxContact" Grid.Row="2"></ListBox>
+        <Frame Grid.Column="0">
+           
+        </Frame>
+
     </Grid>
 </Window>

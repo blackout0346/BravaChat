@@ -17,6 +17,6 @@ public:
 	void POST();
 	void DELETEV();
 	void PORT();
-
+	int GetUserIdFromToken(crow::request& req);
 };
 

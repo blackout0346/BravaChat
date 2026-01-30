@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="RestApi.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestApi"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="#FFFFFF">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*">
+            </RowDefinition>
+            <RowDefinition>
+            </RowDefinition>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" Height="100" Margin="0,0,0,125" Fill="#FF6CBEE8" />
+        <TextBox x:Name="InputMsg" Grid.Row="1" Background="#80C8ED" Width="700" Height="50" Margin="21,165,79,10"  ></TextBox>
+        <Button x:Name="sendMessage" Grid.Row="1"  Width="50" Height="50" Margin="726,165,24,10" Content="Send" Click="sendMessage_Click" Background="White" Focusable="False" FontFamily="Segoe UI Variable Text Semibold" FontSize="14" />
+    </Grid>
+</UserControl>

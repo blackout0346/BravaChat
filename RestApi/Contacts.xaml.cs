@@ -21,7 +21,14 @@ namespace RestApi
     /// </summary>
     public partial class Contacts : Window
     {
+        ItemContact contact;
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
+        
+        struct UserNames
+        {
+            public string Name { get; set; }
+        }
+
         public Contacts()
         {
             InitializeComponent();
@@ -30,12 +37,18 @@ namespace RestApi
         private async void ViewContact()
         {
             RestRequest ContactRequest = new RestRequest("/Contact", Method.Get);
-            RestResponse ContactResponse = await restClient.ExecuteAsync(ContactRequest);
-            if (ContactResponse.IsSuccessful)
+            UserNames userNames = new UserNames() { Name = restClient.GetAsync(ContactRequest).ToString() };
+
+            RestResponse ContactResponse = await restClient.ExecuteAsync<UserNames>(ContactRequest);
+            if (ContactResponse.IsSuccessStatusCode)
             {
-                var data = ContactResponse.Content;
-                MessageBox.Show(data);
-                
+                foreach (var item in userNames.ToString())
+                {
+                    contact = new ItemContact(item.ToString());
+                    
+
+                }
+                    
             }
         }
     }
