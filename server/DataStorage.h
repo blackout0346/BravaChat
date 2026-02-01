@@ -1,9 +1,10 @@
 #pragma once
 #define SQLITECPP_COMPILE_DLL
+#define _CRT_SECURE_NO_WARNINGS
 #include "SQLiteCpp/SQLiteCpp.h"
 #include <iostream>
 #include <string>
-
+#include"crow_all.h"
 using namespace std;
 class DataStorage
 {
@@ -15,9 +16,16 @@ public:
 	void createDatabase();
 	void SelectQueryDatabase(string sqlquery);
 	void GetQueryDatabase(string sqlquery);
-	void InsertMessage(int userId, int chatId, string Messages);
+	void DeleteContact(int UserId1, int UserId2);
+	void InsertMessage(int userId, int chatId, string Message, int replyId, int ForwardId);
+	crow::json::wvalue GetMessages(crow::json::wvalue  msg, int chatId);
 	void InsertChat(int userId, int chatId, string Messages);
-	void InsertContact(int userId, int chatId, string Messages);
-	void InsertUsers(int userId, int chatId, string Messages);
+	void InsertContact(int userId1, int userId2);
+	crow::json::wvalue GetContact(int userId, vector<crow::json::wvalue> contacts);
+	crow::json::wvalue SelectLogin(string login, string password, int number);
+	void InsertAuth(string login, string password, string email, int number, string photo);
+	string getDateTime();
+	crow::json::wvalue setUserId(crow::json::wvalue user,int userId);
+	crow::json::wvalue SearchLogin(crow::json::wvalue user, string search);
 };
 

@@ -46,3 +46,175 @@ void DataStorage::GetQueryDatabase(string sqlquery)
 		cout << "get data " << e.what() << endl;
 	}
 }
+
+void DataStorage::DeleteContact(int UserId1, int UserId2)
+{
+	SQLite::Statement query(db, "DELETE FROM Contact WHERE UserId1 = ? AND UserId2 =?");
+	query.bind(1, UserId1);
+	query.bind(2, UserId2);
+	query.exec();
+}
+
+void DataStorage::InsertMessage(int userId, int chatId, string Message, int replyId, int ForwardId)
+{
+	SQLite::Statement query(db, "INSERT INTO Message(UserId, ChatId,SendDate, Message, ReplyId, ForwardId)VALUES(?, ?, ?, ?, ?, ?)");
+	query.bind(1, userId);
+	query.bind(2, chatId);
+	query.bind(3, getDateTime());
+	query.bind(4, Message);
+	if (replyId != 0);
+	{
+		query.bind(5, replyId);
+	}
+	if (replyId != 0);
+	{
+		query.bind(6, replyId);
+	}
+	if (replyId != 0);
+	{
+		query.bind(7, replyId);
+	}
+	query.exec();
+
+}
+
+crow::json::wvalue DataStorage::GetMessages(crow::json::wvalue msg , int chatId)
+{
+	SQLite::Statement query(db, "SELECT M.Id, M.UserId, U.Login, M.chatId, M.SendDate, M.Message, M.ReplyId, M.ForwardId, M.EditText FROM Message AS M INNER JOIN Users AS U ON U.Id = M.UserId WHERE m.chatId = ? ORDER BY SendDate ASC");
+	query.bind(1, chatId);
+	while (query.executeStep())
+	{
+		msg["Id"] = query.getColumn(0).getInt();
+		msg["chatId"] = query.getColumn(1).getInt();
+		msg["SendDate"] = query.getColumn(2).getText();
+		msg["Message"] = query.getColumn(3).getText();
+	
+		if (!query.getColumn(4).isNull());
+		{
+			msg["Replyid"] = query.getColumn(4).getInt();
+		}
+		if (!query.getColumn(5).isNull());
+		{
+			msg["ForwardId"] = query.getColumn(5).getInt();
+		}
+		if (!query.getColumn(6).isNull());
+		{
+			msg["EditText"] = query.getColumn(6).getText();
+		}
+	}
+	return msg;
+
+}
+
+
+void DataStorage::InsertChat(int userId, int chatId, string Messages)
+{
+	SQLite::Statement checkQuery(db, "SELECT C.Id FROM Chats"
+		"INNER JOIN UserChat AS UC1 ON C.Id = UC1.chatId"
+		"INNER JOIN UserChat AS UC2 ON C.Id = UC2.chatId"
+		"WHERE C.isGroup = 0"
+		"AND UC1.UserId = ?"
+		"AND UC2.UserId = ?"
+		"AND(SELECT COUNT(*) FROM UserChat WHERE chatId = C.Id) =2");
+}
+
+void DataStorage::InsertContact(int userId1, int userId2)
+{
+	SQLite::Statement query(db, "INSERT INTO Contact(UserId1, UserId2, createAt) VALUES(?,?,?)");
+	query.bind(1, userId1);
+	query.bind(2, userId2);
+	query.bind(3, getDateTime());
+	query.exec();
+}
+
+crow::json::wvalue DataStorage::GetContact(int userId, vector<crow::json::wvalue> contacts)
+{
+	SQLite::Statement query(db, "SELECT U.Id, U.Login FROM Users AS U"
+		"INNER JOIN Contact AS C ON (C.UserId2 =U.Id AND C.UserId1 = ?)");
+	query.bind(1, userId);
+	while (query.executeStep())
+	{
+		crow::json::wvalue contact;
+		contact["Id"] = query.getColumn(0).getInt();
+		contact["Login"] = query.getColumn(1).getText();
+		contacts.push_back(move(contact));
+	}
+	return contacts;
+}
+
+
+
+crow::json::wvalue DataStorage::SelectLogin(string login, string password, int number)
+{
+	crow::json::wvalue response;
+	SQLite::Statement query(db, "SELECT Id,Login,NumberPhone, Email,Password,PicturePath FROM Users WHERE name = ? AND password = ? OR NumberPhone = ?");
+	query.bind(1, login);
+	query.bind(2, password);
+	query.bind(3, number);
+	if(query.executeStep())
+	{
+	
+		response["Id"] = query.getColumn(0).getInt();
+		response["Login"] = query.getColumn(1).getText();
+		response["message"] = "Login successful";
+
+	}
+	return response;
+}
+
+void DataStorage::InsertAuth(string login, string password, string email, int number, string photo )
+{
+	SQLite::Statement query(db, "INSERT INTO Users(Login, NumberPhone, Email, Password, PicturePath) VALUES(?,?,?,?,?)");
+	query.bind(1, login);
+	query.bind(2, number);
+	query.bind(3, email);
+	query.bind(4, password);
+	if (!photo.empty())
+	{
+		query.bind(4, photo);
+	}
+
+	query.exec();
+
+}
+
+string DataStorage::getDateTime()
+{
+	auto date = chrono::system_clock::now();
+	auto time = chrono::system_clock::to_time_t(date);
+	stringstream ss;
+	ss << put_time(localtime(&time), "%Y-%m-%d %H:%M:%S");
+	return ss.str();
+}
+
+crow::json::wvalue DataStorage::setUserId(crow::json::wvalue users, int userId)
+{
+	SQLite::Statement query(db, "SELECT Login FROM Users WHERE Id = ?" );
+	query.bind(1, userId);
+
+	if (query.executeStep())
+	{
+		users["Id"] = query.getColumn(0).getInt();
+		users["Login"] = query.getColumn(1).getInt();
+
+	}
+	return users;
+
+
+}
+
+crow::json::wvalue DataStorage::SearchLogin(crow::json::wvalue user, string search)
+{
+	vector<crow::json::wvalue> users;
+	SQLite::Statement query(db, "SELECT Id, Login FROM Users WHERE Login LIKE ? LIMIT 20");
+	query.bind(1, "%" + search + "%");
+
+	while (query.executeStep())
+	{
+		user["Id"] = query.getColumn(0).getInt();
+		user["Login"] = query.getColumn(0).getInt();
+		users.push_back(move(user));
+	}
+	return users;
+}
+

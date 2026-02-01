@@ -8,8 +8,10 @@ int main()
     crow::SimpleApp app;
 	Route route;
 	db.createDatabase();
-	route.POST();
-	route.GET();
-	route.PORT();
 
+	route.UsersRoute();
+	route.ChatRoute();
+	route.ContactsRoute();
+	route.MessageRoute();
+	route.PORT();
 }

@@ -3,147 +3,215 @@
 
 void Route::MessageRoute()
 {
-    CROW_ROUTE(app, "/message").methods("GET"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/users/messages").methods("POST"_method)([&](const crow::request req)
         {
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
+                if (!x.has("userId") || !x.has("chatId") || !x.has("Message"))
+                {
+                    return crow::response(400, "fail req");
+                }
+                int userId = x["userId"].i();
+                int chatId = x["chatId"].i();
+                int replyId = x["replyId"].i();
+                int forwardId = x["forwardId"].i();
+                string Message = x["Message"].s();
 
-                cout << x["name"] << endl;
-                cout << x["message"] << endl;
-                ostringstream  query;
-                query << "SELECT M.Id, M.UserId, M.SendDate, M.ChatId, M.MsgId, M.ReplyId FROM MessageGET AS M JOIN User AS U ON U.id = M.UserId JOIN Chat AS C ON C.id = M.ChatId";
-                db.SelectQueryDatabase(query.str());
+                db.InsertMessage(userId, chatId, Message, replyId, forwardId);
+                int messageId = static_cast<int>(db.db.getLastInsertRowid());
+                crow::json::wvalue response;
+                response["Id"] = messageId;
+                response["Message"] = "Message sent";
+                return crow::response(201, response);
+                
             }
             catch (exception& e)
             {
+                return crow::response(400, e.what());
                 cout << "Error /message: " << e.what() << endl;
             }
-            return 200;
+           
         });
-    CROW_ROUTE(app, "/message/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/users/messages/chat/<int>")([&](int chatId)
         {
             try {
-                ostringstream query;
-                ostringstream query2;
-                crow::json::rvalue x = crow::json::load(req.body);
-                cout << x["message"] << endl;
+                crow::json::wvalue msg;
+                vector<crow::json::wvalue> message;
+                auto result = db.GetMessages(msg, chatId);
+                message.push_back(move(result));
 
-                query << "DELETE FROM Message WHERE Id = " << x["message"] << ";";
+                crow::json::wvalue response;
+                response["message"] = move(message);
+                
+                return crow::response(200, response);
 
-                db.GetQueryDatabase(query.str());
             }
             catch (exception& e)
             {
-                cout << "error /message/delete" << e.what() << endl;
+                return crow::response(400, e.what());
+                cout << "Error /users/messages/chat/<int>: " << e.what() << endl;
             }
 
-            return 200;
         });
-    CROW_ROUTE(app, "/message").methods("GET"_method)([=](const crow::request req)
-        {
-            try {
-                crow::json::rvalue x = crow::json::load(req.body);
-                cout << x["message"] << endl;
-                ostringstream  query;
-                query << "SELECT M.Id, M.UserId, M.SendDate, M.ChatId, M.MsgId, M.ReplyId FROM MessageGET AS M JOIN User AS U ON U.id = M.UserId JOIN Chat AS C ON C.id = M.ChatId";
-                db.SelectDatabase(query.str());
-            }
-            catch (exception& e) {
-                cout << "error /message" << e.what() << endl;
-            }
-            return 200;
-        });
-
-    PORT();
 }
 void Route::ContactsRoute()
-{    CROW_ROUTE(app, "/contact").methods("GET"_method)([=](const crow::request req)
+{    CROW_ROUTE(app, "/contacts").methods("GET"_method)([&](const crow::request req)
         {
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
-
-                ostringstream query;
-                query << "SELECT C.UserId1,U.Login, C.UserId2 FROM Contact AS CJOIN Users AS U ON U.Id = C.UserId1";
-                db.GetQueryDatabase(query.str());
+                if (!x.has("UserId1") || !x.has("UserId2"))
+                {
+                    return crow::response(400, "missing required fields! ");
+                }
+                int user1 = x["UserId1"].i();
+                int user2 = x["UserId2"].i();
+                if (user1 == user2)
+                {
+                    return crow::response(400, "cannot add yourself as contact! ");
+                }
+                db.InsertContact(user1, user2);
+                return crow::response(201, "contact added");
+               
             }
             catch(exception& e)
             {
                 cout << "Error /contact: " << e.what() << endl;
             }
-            return 200;
+
         });
+CROW_ROUTE(app, "/contacts/<int>")([&](int userId)
+    {
+        try {
+
+            vector<crow::json::wvalue> contacts;
+            auto result = db.GetContact(userId ,contacts);
+            crow::json::wvalue response;
+            response["Contact"] = move(result);
+            return crow::response(200, response);
+
+        }
+        catch (exception& e)
+        {
+            return crow::response(400, e.what());
+        }
+
+    });
+CROW_ROUTE(app, "/contacts/<int>/<int>").methods("DELETE"_method)([&](int userId1, int userId2)
+    {
+        try {
+            if (userId1 > userId2)
+            {
+                swap(userId1, userId2);
+            }
+            db.DeleteContact(userId1, userId2);
+            return crow::response(200,"Contact Deleted");
+
+        }
+        catch (exception& e)
+        {
+            return crow::response(400, e.what());
+        }
+
+    });
+
 }
 void Route::UsersRoute()
 {
-    CROW_ROUTE(app, "/auth").methods("POST"_method)([=](const crow::request& req) {
+    CROW_ROUTE(app, "/auth").methods("POST"_method)([&](const crow::request& req) {
 
 
         crow::json::rvalue x = crow::json::load(req.body);
         try {
-            cout << x["Login"] << endl;
-            cout << x["numbers"] << endl;
-            cout << x["emails"] << endl;
-            cout << x["passwords"] << endl;
 
-            ostringstream  query;
-            query << "INSERT INTO Users(Login, NumberPhone, Email, Password) VALUES('"
-                << x["Login"].s() << "', '"
-                << x["numbers"].s() << "','"
-                << x["emails"].s() << "','"
-                << x["passwords"].s() << "')";
-            db.GetQueryDatabase(query.str());
-            cout << " I got auth!" << endl;
+            string login = x["Login"].s();
+            string Password = x["Password"].s();
+            int NumberPhone = x["NumberPhone"].i();
+            string email = x["email"].s();
+            string photo = x["photo"].s();
+            db.InsertAuth(login, Password, email, NumberPhone, photo);
+            int userId = static_cast<int>(db.db.getLastInsertRowid());
+            crow::json::wvalue response;
+            response["id"] = userId;
+            response["message"] = "User registered successfully";
+            return crow::response(201, response);
+
 
         }
         catch (exception& e) {
-            cout << "error /auth" << e.what() << endl;
+            return crow::response(400, e.what());
         }
-        return 200;
         });
     CROW_ROUTE(app, "/login").methods("POST"_method)([&](const crow::request& req) {
-        try {
+        try 
+        {
+            crow::json::rvalue x = crow::json::load(req.body);
 
-       
-        crow::json::rvalue x = crow::json::load(req.body);
-        cout << x["name"] << endl;
-        cout << x["password"] << endl;
-        ostringstream  query;
-        query << "SELECT * FROM User WHERE name = " << x["name"].s() << "AND password = " << x["password"] << " OR NumberPhone = " << x["NumberPhone"] << ";";
-        db.DeleteDatabase(query.str());
+            string login = x["Login"].s();
+            string Password = x["Password"].s();
+            int NumberPhone = x["NumberPhone"].i();
+            auto result = db.SelectLogin(login, Password, NumberPhone);
+            return crow::response(200, result);
+
         }
         catch (exception& e) {
-            cout << "error /login" << e.what() << endl;
+            return crow::response(400, "invalid login");
         }
-        return 200;
+    
         });
-    CROW_ROUTE(app, "/createchat").methods("POST"_method)([=](const crow::request& req) {
+    CROW_ROUTE(app, "/users/<int>")([&](const crow::json::wvalue user ,int userId) {
+        try
+        {
+            auto result = db.setUserId(user, userId);
+            return crow::response(200, result);
+        }
+        catch (exception& e) {
+            return crow::response(400, "invalid login");
+        }
+
+        });
+    CROW_ROUTE(app, "/users/search/<string>")([&](string searchTerm) {
+        try
+        {
+      
+            crow::json::wvalue user;
+            auto result = db.SearchLogin(user, searchTerm);
+            crow::json::wvalue response;
+            response["users"] = move(result);
+
+
+            return crow::response(200, response);
+        }
+        catch (exception& e) {
+            return crow::response(400, "invalid login");
+        }
+
+        });
+
+    CROW_ROUTE(app, "/createchat").methods("POST"_method)([&](const crow::request& req) {
         try{
         crow::json::rvalue x = crow::json::load(req.body);
-        cout << x["name"] << endl;
-        cout << x["users"] << endl;
+
         cout << " I got chat!" << endl;
         ostringstream query;
         ostringstream query2;
-        query2 << "INSERT INTO Roles(Name, UserId) VALUES('" <<x["RoleName"]<<"'"<<"(SELECT Id FROM Users WHERE Id =" << x["Names"] << "))";
+        query2 << "INSERT INTO Roles(Name, UserId) VALUES('" <<x["RoleName"].s()<<"'"<<"(SELECT Id FROM Users WHERE Id =" << x["Names"].s() << "))";
         query << "SELECT C.UserId1, C.UserId2, C.typeId FROM Chat AS C JOIN User AS U ON U.Id = C.UserId1 JOIN User AS U ON U.Id = C.UserId2 JOIN Roles AS R ON R.Id = C.typeId " << ";";
-        db.AddinDatabase(query.str());
-        db.AddinDatabase(query2.str());
+
         }
         catch (exception& e) {
             cout << "error /login:" << e.what() << endl;
         }
         return crow::response(200, "OK");
         });
-    CROW_ROUTE(app, "/users/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/users/delete").methods("DELETE"_method)([&](const crow::request req)
         {
             try{
             crow::json::rvalue x = crow::json::load(req.body);
 
-            cout << x["name"] << endl;
-            cout << x["message"] << endl;
+
             ostringstream  query;
-            query << "INSERT INTO MessageSET(Msg)VALUES('" << x["message"] << "')";
-            db.AddinDatabase(query.str());
+            query << "INSERT INTO MessageSET(Msg)VALUES('" << x["message"].s() << "')";
+
             }
             catch (exception& e)
             {
@@ -151,38 +219,78 @@ void Route::UsersRoute()
             }
             return crow::response(200, "complete message");
         });
-    PORT();
 }
 void Route::ChatRoute()
 {
-    CROW_ROUTE(app, "/users/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/chats").methods("POST"_method)([&](const crow::request req)
         {
-            try{
-            crow::json::rvalue x = crow::json::load(req.body);
-            cout << x["name"] << endl;
-            ostringstream  query;
-            query << "DELETE FROM User WHERE id = " << x["name"].s() << ";";
-            db.DeleteDatabase(query.str());
-            }
-            catch (exception& e)
-            {
-                cout << "Error /chat: " << e.what() << endl;
-            }
+            try {
+                crow::json::rvalue x = crow::json::load(req.body);
+                if (!x || !x.has("name") || !x.has("UserIds"))
+                {
+                    return crow::response(400, "missing required fields");
+                }
 
-            return 200;
+                bool isGroup = x["UserIds"].size() > 2;
+                if (!isGroup)
+                {
+                    vector<int> UserIds;
+                    for (const auto& userId : x["UserIds"])
+                    {
+                        UserIds.push_back(userId.i());
+                    }
+                    SQLite::Statement checkQuery(db.db, "SELECT C.Id FROM Chats"
+                        "INNER JOIN UserChat AS UC1 ON C.Id = UC1.chatId"
+                        "INNER JOIN UserChat AS UC2 ON C.Id = UC2.chatId"
+                        "WHERE C.isGroup = 0"
+                        "AND UC1.UserId = ?"
+                        "AND UC2.UserId = ?"
+                        "AND(SELECT COUNT(*) FROM UserChat WHERE chatId = C.Id) =2");
+                    checkQuery.bind(1, UserIds[0]);
+                    checkQuery.bind(2, UserIds[1]);
+                    if (checkQuery.executeStep())
+                    {
+                        crow::json::wvalue response;
+                        response["error"] = "Private chat with this user already exists";
+                        response["existingChatId"] = checkQuery.getColumn(0).getInt();
+                        return crow::response(409, response);
+                    }
+                }
+                db.db.exec("BEGIN TRANSACTION");
+                SQLite::Statement chatQuery(db.db,"INSERT INTO Chats(name, isGroup,createAt)VALUES(?,?,?)");
+                chatQuery.bind(1, x["name"].s());
+                chatQuery.bind(2, isGroup ? 1 : 0);
+                chatQuery.bind(3, db.getDateTime());
+                chatQuery.exec();
+
+                int chatId = static_cast<int>(db.db.getLastInsertRowid());
+                SQLite::Statement userChatQuery(db.db, "INSERT INTO UserChat(UserId,ChatId) VALUES(?,?,?)");
+                for (const auto& userId : x["UserIds"])
+                {
+                    userChatQuery.reset();
+                    userChatQuery.bind(1, userId.i());
+                    userChatQuery.bind(2, chatId);
+                    userChatQuery.exec();
+
+                }
+                db.db.exec("COMMIT");
+                crow::json::wvalue response;
+                response["Id"] = chatId;
+                response["message"] = "Chat created";
+                return crow::response(201, response);
+                    
+            }
+            catch (const std::exception& e) {
+                db.db.exec("ROLLBACK");
+                return crow::response(400, e.what());
+            }
         });
-    CROW_ROUTE(app, "/message/delete").methods("DELETE"_method)([=](const crow::request req)
+    CROW_ROUTE(app, "/message/delete").methods("DELETE"_method)([&](const crow::request req)
         {
             try {
                 ostringstream query;
                 ostringstream query2;
                 crow::json::rvalue x = crow::json::load(req.body);
-                cout << x["message"] << endl;
-
-                query << "DELETE FROM MessageSET WHERE Id = " << x["message"] << ";";
-                query2 << "DELETE FROM MessageGET WHERE Id ="<<x["message"] << ";";
-                db.DeleteDatabase(query.str());
-                db.DeleteDatabase(query2.str());
             }
             catch (exception& e)
             {
@@ -191,7 +299,6 @@ void Route::ChatRoute()
 
             return 200;
         });
-    PORT();
 }
 
 void Route::PORT()

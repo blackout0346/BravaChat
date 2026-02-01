@@ -3,6 +3,7 @@
 #include "crow_all.h"
 #include <iostream>
 #include "DataStorage.h"
+#include <chrono>
 using namespace std;
 class Route
 {
@@ -18,6 +19,5 @@ public:
 	void UsersRoute();
 	void ChatRoute();
 	void PORT();
-	int GetUserIdFromToken(crow::request& req);
 };
 

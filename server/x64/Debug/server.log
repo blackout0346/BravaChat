@@ -88,15 +88,18 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13021,24): warning C4267
 C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13037,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "Route.cpp")
   
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(10,28): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(11,28): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(114,20): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
 C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244: аргумент: преобразование "unsigned __int64" в "int", возможна потеря данных
   (компиляция исходного файла "Route.cpp")
       C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75):
       контекст создания экземпляра шаблона (сначала самый старый)
-          C:\Users\smira\source\repos\serverCPP\server\Route.h(11,18):
+          C:\Users\smira\source\repos\serverCPP\server\Route.h(12,18):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Crow<>"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14964,14):
           во время компиляции функции-члена класс шаблон "void crow::Crow<>::run(void)"
-              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(186,13):
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(198,13):
               см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15001,1):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>"
@@ -106,7 +109,7 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244
               см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::do_accept" в "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run"
               C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15007,38):
               см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run" в "crow::Crow<>::run"
-              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(186,13):
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(198,13):
               см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14398,19):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Connection<Adaptor,Handler>"
@@ -156,6 +159,31 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(8277,25): warning C4267:
               Handler=crow::Crow<>
           ]
   
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244: аргумент: преобразование "_Ty" в "int", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244:         with
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244:         [
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244:             _Ty=crow::black_magic::single_tag_to_type<1>::type
+C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244:         ]
+  (компиляция исходного файла "Route.cpp")
+      C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59):
+      контекст создания экземпляра шаблона (сначала самый старый)
+          C:\Users\smira\source\repos\serverCPP\server\Route.cpp(6,53):
+          выполняется компиляция ссылки на экземпляр шаблон функции "void crow::TaggedRule<crow::black_magic::single_tag_to_type<1>::type>::operator ()<Route::MessageRoute::<lambda_1>>(Func &&)"
+          with
+          [
+              Func=Route::MessageRoute::<lambda_1>
+          ]
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(6,68):
+              см. первую ссылку на "crow::TaggedRule<crow::black_magic::single_tag_to_type<1>::type>::operator ()" в "Route::MessageRoute"
+          C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12182,25):
+          выполняется компиляция ссылки на экземпляр шаблон функции "void crow::detail::wrapped_handler_call<Route::MessageRoute::<lambda_1>,_Ty>(crow::request &,crow::response &,const F &,_Ty &&)"
+          with
+          [
+              _Ty=crow::black_magic::single_tag_to_type<1>::type,
+              F=Route::MessageRoute::<lambda_1>
+          ]
+  
+  LINK : не найден или не выполнена сборка C:\Users\smira\source\repos\serverCPP\x64\Debug\server.exe при последней инкрементной компоновке; выполняется полная компоновка
   server.vcxproj -> C:\Users\smira\source\repos\serverCPP\x64\Debug\server.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.
