@@ -199,3 +199,7 @@ C:\Users\Академия\Desktop\BravoChat-master\RestApi\obj\Debug\RestApi.csp
 C:\Users\Академия\Desktop\BravoChat-master\RestApi\obj\Debug\RestApi.csproj.Up2Date
 C:\Users\Академия\Desktop\BravoChat-master\RestApi\obj\Debug\RestApi.exe
 C:\Users\Академия\Desktop\BravoChat-master\RestApi\obj\Debug\RestApi.pdb
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemContact.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\UserControl1.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemContact.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\UserControl1.baml

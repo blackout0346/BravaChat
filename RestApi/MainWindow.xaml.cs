@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
@@ -17,15 +18,15 @@ namespace RestApi
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         string inputsName = null;
         string inputsPassword = null;
-        struct myResponse
+
+        class Logins
         {
-            public string name { get; set; }
-            public int price { get; set; }
-        }
-        struct Logins
-        {
+            [JsonPropertyName("Login")]
             public string Login { get; set; }
-            public string password { get; set; }
+            [JsonPropertyName("Password")]
+            public string Password { get; set; }
+            [JsonPropertyName("NumberPhone")]
+            public string NumberPhone {  get; set; }
         }
         public MainWindow()
         {
@@ -33,24 +34,7 @@ namespace RestApi
 
         }
 
-        private async void GetRequest()
-        {
-
-            RestRequest request = new RestRequest("/Users", Method.Get);
-            request.AddHeader("username", "myname");
-
-
-            RestResponse<myResponse> response = await restClient.ExecuteAsync<myResponse>(request);
-
-            if (response.IsSuccessful)
-            {
-                var data = response.Data;
-
-                var key = response.GetHeaderValue("secretkey");
-
-                //output.Content = data.name + ' ' + data.price.ToString() + " " + key;
-            }
-        }
+   
         private void setinput()
         {
             inputsName = inputName.Text.Trim();
@@ -77,13 +61,14 @@ namespace RestApi
             var logins = new Logins
             {
                 Login = inputsName,
-                password = inputsPassword
+                Password = inputsPassword,
+                NumberPhone = "0"
             };
             RestRequest PostRequest = new RestRequest("/login", Method.Post);
-            var jsonbody = JsonSerializer.Serialize(logins);
-            PostRequest.AddJsonBody(jsonbody);
+            
+            PostRequest.AddJsonBody(logins);
             RestResponse response = await restClient.ExecuteAsync(PostRequest);
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
             {
                 Contacts contacts = new Contacts();
                 contacts.Show();
@@ -91,11 +76,13 @@ namespace RestApi
             }
             else if(response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                MessageBox.Show("Неверный логин или пароль");
+             
+                MessageBox.Show($"Неверный логин или пароль {response.Content}");
             }
             else
             {
-                MessageBox.Show("Такого пользователя нет");
+
+                MessageBox.Show($"Такого пользователя нет {response.Content}");
             }
         }
         private async void click_Click(object sender, RoutedEventArgs e)

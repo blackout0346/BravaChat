@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows;
@@ -15,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
-
+using System.Text.Json.Serialization;
 namespace RestApi
 {
     /// <summary>
@@ -24,17 +25,27 @@ namespace RestApi
     public partial class authification : Window
     {
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
-        struct AuthificationData
+        class AuthificationData
         {
-            public string Login {  get; set; }
+            [JsonPropertyName("Login")]
+            public string Login { get; set; }
+
+            [JsonPropertyName("emails")]
             public string emails { get; set; }
+
+            [JsonPropertyName("passwords")]
             public string passwords { get; set; }
+
+            [JsonPropertyName("numbers")]
             public string numbers { get; set; }
+
+            [JsonPropertyName("photo")]
+            public string photo { get; set; }
         }
         private string Login = null;
-        private string Email = null;
-        private string Password = null;
-        private string Number = null;
+        private string emails = null;
+        private string passwords = null;
+        private string numbers = null;
         
         public authification()
         {
@@ -46,17 +57,17 @@ namespace RestApi
         private void setData()
         {
             Login = inputName.Text;
-            Email = inputEmail.Text.Trim();
-            Password = inputPassword.Text.Trim();
-            Number = inputNumber.Text.Trim();
-            if (Number.Length > 15)
+            emails = inputEmail.Text.Trim();
+            passwords = inputPassword.Text.Trim();
+            numbers = inputNumber.Text.Trim();
+            if (numbers.Length > 15)
             {
                 MessageBox.Show("Некорректный номер");
           
             }
-            if (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password))
+            if (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(emails) && !string.IsNullOrEmpty(passwords))
             {
-                AuthResponse(Login, Email, Password, Number);
+                AuthResponse(Login, emails, passwords, numbers);
                 inputName.Text = " ";
                 inputPassword.Text = " ";
                 inputEmail.Text = " ";
@@ -65,7 +76,7 @@ namespace RestApi
             }
             else
             {
-                MessageBox.Show($" {Login},{Email}, {Number}, {Password}Введите логин и пароль");
+               
                 MessageBox.Show("Введите все поля");
                 inputName.Text = " ";
                 inputPassword.Text = " ";
@@ -83,19 +94,24 @@ namespace RestApi
                 Login = name,
                 emails = email,
                 passwords = password,
-                numbers = number
+                numbers = number,
+                photo = ""
 
             };
             RestRequest AuthRequest = new RestRequest("/auth", Method.Post);
-            var jsonbody = JsonSerializer.Serialize(NewAuthUser);
-            AuthRequest.AddJsonBody(jsonbody);
+           
+            AuthRequest.AddJsonBody(NewAuthUser);
             RestResponse AuthResponse = await restClient.ExecuteAsync(AuthRequest);
-            if(AuthResponse.IsSuccessful)
+            if(AuthResponse.IsSuccessStatusCode)
             {
                 Contacts contacts = new Contacts();
                 contacts.Show();
                 var data = AuthResponse.Content;
                 MessageBox.Show($"{data}");
+            }
+            else
+            {
+                MessageBox.Show($"Сервер вернул ошибку: {AuthResponse.Content}");
             }
         }
    

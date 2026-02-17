@@ -16,10 +16,11 @@
             </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*">
+            <RowDefinition Height="25*">
             </RowDefinition>
-            <RowDefinition>
+            <RowDefinition Height="14*">
             </RowDefinition>
+            <RowDefinition Height="11*"/>
         </Grid.RowDefinitions>
         <Label x:Name="UserName" Grid.Row="0" Grid.Column="0" Content="UserName" Grid.ColumnSpan="2" Margin="63,25,63,0"/>
     </Grid>

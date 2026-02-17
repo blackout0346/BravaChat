@@ -36,14 +36,10 @@ void Route::MessageRoute()
         {
             try {
                 crow::json::wvalue msg;
-                vector<crow::json::wvalue> message;
-                auto result = db.GetMessages(msg, chatId);
-                message.push_back(move(result));
-
-                crow::json::wvalue response;
-                response["message"] = move(message);
-                
-                return crow::response(200, response);
+           
+                auto result = db.GetMessages(move(msg), chatId);
+           
+                return crow::response(200, result);
 
             }
             catch (exception& e)
@@ -199,14 +195,28 @@ void Route::UsersRoute()
     CROW_ROUTE(app, "/auth").methods("POST"_method)([&](const crow::request& req) {
 
 
-        crow::json::rvalue x = crow::json::load(req.body);
+        auto x = crow::json::load(req.body);
+        if (!x) return crow::response(400, "Invalid JSON format");
+
         try {
+    
+            if (!x.has("Login") || !x.has("passwords") || !x.has("emails") || !x.has("numbers")) {
+                return crow::response(400, "Missing required fields: Login, passwords, emails or numbers");
+            }
 
             string login = x["Login"].s();
-            string Password = x["Password"].s();
-            int NumberPhone = x["NumberPhone"].i();
-            string email = x["email"].s();
-            string photo = x["photo"].s();
+            string Password = x["passwords"].s(); 
+            string email = x["emails"].s();      
+
+          
+            string numStr = x["numbers"].s();
+            int NumberPhone = std::stoi(numStr);
+
+         
+            string photo = "";
+            if (x.has("photo")) {
+                photo = x["photo"].s();
+            }
             db.InsertAuth(login, Password, email, NumberPhone, photo);
             int userId = static_cast<int>(db.db.getLastInsertRowid());
             crow::json::wvalue response;
@@ -228,18 +238,24 @@ void Route::UsersRoute()
             string login = x["Login"].s();
             string Password = x["Password"].s();
             int NumberPhone = x["NumberPhone"].i();
+
             auto result = db.SelectLogin(login, Password, NumberPhone);
+
+            if (result.keys().empty()) {
+                return crow::response(401, "Invalid credentials");
+            }
             return crow::response(200, result);
 
         }
         catch (exception& e) {
-            return crow::response(400, "invalid login");
+            return crow::response(400, e.what());
         }
     
         });
-    CROW_ROUTE(app, "/users/<int>")([&](const crow::json::wvalue user ,int userId) {
+    CROW_ROUTE(app, "/users/<int>")([&](int userId) {
         try
         {
+            const crow::json::wvalue user;
             auto result = db.setUserId(user, userId);
             return crow::response(200, result);
         }

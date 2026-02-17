@@ -62,15 +62,15 @@ void DataStorage::InsertMessage(int userId, int chatId, string Message, int repl
 	query.bind(2, chatId);
 	query.bind(3, getDateTime());
 	query.bind(4, Message);
-	if (replyId != 0);
+	if (replyId != 0)
 	{
 		query.bind(5, replyId);
 	}
-	if (replyId != 0);
+	if (replyId != 0)
 	{
 		query.bind(6, replyId);
 	}
-	if (replyId != 0);
+	if (replyId != 0)
 	{
 		query.bind(7, replyId);
 	}
@@ -80,28 +80,32 @@ void DataStorage::InsertMessage(int userId, int chatId, string Message, int repl
 
 crow::json::wvalue DataStorage::GetMessages(crow::json::wvalue msg , int chatId)
 {
+	std::vector<crow::json::wvalue> rows;
 	SQLite::Statement query(db, "SELECT M.Id, M.UserId, U.Login, M.chatId, M.SendDate, M.Message, M.ReplyId, M.ForwardId, M.EditText FROM Message AS M INNER JOIN Users AS U ON U.Id = M.UserId WHERE m.chatId = ? ORDER BY SendDate ASC");
 	query.bind(1, chatId);
 	while (query.executeStep())
 	{
-		msg["Id"] = query.getColumn(0).getInt();
-		msg["chatId"] = query.getColumn(1).getInt();
-		msg["SendDate"] = query.getColumn(2).getText();
-		msg["Message"] = query.getColumn(3).getText();
+		crow::json::wvalue row;
+		row["Id"] = query.getColumn(0).getInt();
+		row["chatId"] = query.getColumn(1).getInt();
+		row["SendDate"] = query.getColumn(2).getText();
+		row["Message"] = query.getColumn(3).getText();
 	
-		if (!query.getColumn(4).isNull());
+		if (!query.getColumn(4).isNull())
 		{
-			msg["Replyid"] = query.getColumn(4).getInt();
+			row["Replyid"] = query.getColumn(4).getInt();
 		}
-		if (!query.getColumn(5).isNull());
+		if (!query.getColumn(5).isNull())
 		{
-			msg["ForwardId"] = query.getColumn(5).getInt();
+			row["ForwardId"] = query.getColumn(5).getInt();
 		}
-		if (!query.getColumn(6).isNull());
+		if (!query.getColumn(6).isNull())
 		{
-			msg["EditText"] = query.getColumn(6).getText();
+			row["EditText"] = query.getColumn(6).getText();
 		}
+		rows.push_back(move(row));
 	}
+	msg["list"] = std::move(rows); 
 	return msg;
 
 }
@@ -147,18 +151,19 @@ crow::json::wvalue DataStorage::GetContact(int userId, vector<crow::json::wvalue
 crow::json::wvalue DataStorage::SelectLogin(string login, string password, int number)
 {
 	crow::json::wvalue response;
-	SQLite::Statement query(db, "SELECT Id,Login,NumberPhone, Email,Password,PicturePath FROM Users WHERE name = ? AND password = ? OR NumberPhone = ?");
+	SQLite::Statement query(db, "SELECT Id, Login, Password FROM Users WHERE Login = ? AND Password = ?");
 	query.bind(1, login);
+	//query.bind(2, number);
 	query.bind(2, password);
-	query.bind(3, number);
 	if(query.executeStep())
 	{
 	
 		response["Id"] = query.getColumn(0).getInt();
 		response["Login"] = query.getColumn(1).getText();
-		response["message"] = "Login successful";
+		response["status"] = "success";
 
 	}
+	
 	return response;
 }
 
@@ -171,7 +176,7 @@ void DataStorage::InsertAuth(string login, string password, string email, int nu
 	query.bind(4, password);
 	if (!photo.empty())
 	{
-		query.bind(4, photo);
+		query.bind(5, photo);
 	}
 
 	query.exec();
@@ -189,7 +194,7 @@ string DataStorage::getDateTime()
 
 crow::json::wvalue DataStorage::setUserId(crow::json::wvalue users, int userId)
 {
-	SQLite::Statement query(db, "SELECT Login FROM Users WHERE Id = ?" );
+	SQLite::Statement query(db, "SELECT Id, Login FROM Users WHERE Id = ?" );
 	query.bind(1, userId);
 
 	if (query.executeStep())
@@ -212,7 +217,7 @@ crow::json::wvalue DataStorage::SearchLogin(crow::json::wvalue user, string sear
 	while (query.executeStep())
 	{
 		user["Id"] = query.getColumn(0).getInt();
-		user["Login"] = query.getColumn(0).getInt();
+		user["Login"] = query.getColumn(1).getInt();
 		users.push_back(move(user));
 	}
 	return users;
