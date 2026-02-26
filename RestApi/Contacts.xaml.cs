@@ -23,17 +23,20 @@ namespace RestApi
     {
         ItemContact contact;
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
-        
+        private object UserId = null;
         struct UserNames
         {
             public string Name { get; set; }
         }
 
-        public Contacts()
+        public Contacts(object userId)
         {
             InitializeComponent();
             ViewContact();
+            UserId = userId;
+            UserName.Content = UserId;
         }
+
         private async void ViewContact()
         {
             RestRequest ContactRequest = new RestRequest("/contacts", Method.Get);
@@ -45,11 +48,17 @@ namespace RestApi
                 foreach (var item in userNames.ToString())
                 {
                     contact = new ItemContact(item.ToString());
-                    
-
                 }
-                    
             }
+        }
+
+      
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow Logins = new MainWindow();
+            Logins.Show();
+            Close();
         }
     }
 }

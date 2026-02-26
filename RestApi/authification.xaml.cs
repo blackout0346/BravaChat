@@ -37,7 +37,7 @@ namespace RestApi
             public string passwords { get; set; }
 
             [JsonPropertyName("numbers")]
-            public string numbers { get; set; }
+            public int numbers { get; set; }
 
             [JsonPropertyName("photo")]
             public string photo { get; set; }
@@ -60,14 +60,19 @@ namespace RestApi
             emails = inputEmail.Text.Trim();
             passwords = inputPassword.Text.Trim();
             numbers = inputNumber.Text.Trim();
-            if (numbers.Length > 15)
+       
+            if(!int.TryParse(numbers, out int input))
+            {
+
+          
+            if (numbers.Length < 11)
             {
                 MessageBox.Show("Некорректный номер");
-          
+                return;
             }
             if (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(emails) && !string.IsNullOrEmpty(passwords))
             {
-                AuthResponse(Login, emails, passwords, numbers);
+                AuthResponse(Login, emails, passwords, input);
                 inputName.Text = " ";
                 inputPassword.Text = " ";
                 inputEmail.Text = " ";
@@ -84,11 +89,12 @@ namespace RestApi
                 inputNumber.Text = " ";
                 return;
             }
-        
 
+            }
         }
-        private async void AuthResponse(string name, string email, string password, string number)
+        private async void AuthResponse(string name, string email, string password, int number)
         {
+
             var NewAuthUser = new AuthificationData
             {
                 Login = name,
@@ -104,7 +110,7 @@ namespace RestApi
             RestResponse AuthResponse = await restClient.ExecuteAsync(AuthRequest);
             if(AuthResponse.IsSuccessStatusCode)
             {
-                Contacts contacts = new Contacts();
+                Contacts contacts = new Contacts(NewAuthUser.Login);
                 contacts.Show();
                 var data = AuthResponse.Content;
                 MessageBox.Show($"{data}");

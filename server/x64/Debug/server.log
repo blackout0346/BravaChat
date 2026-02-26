@@ -1,131 +1,4 @@
-﻿  DataStorage.cpp
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Exception.h(26,45): warning C4275: class "std::runtime_error", не являющийся dll-интерфейсом, использован в качестве базового для dll-интерфейса class "SQLite::Exception"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\stdexcept(100,19):
-       см. объявление "std::runtime_error"
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Exception.h(26,21):
-       см. объявление "SQLite::Exception"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(714,29): warning C4251: SQLite::Statement::mQuery: class "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\xstring(5127,29):
-       см. объявление "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(716,29): warning C4251: SQLite::Statement::mpPreparedStatement: class "std::shared_ptr<sqlite3_stmt>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(661,32):
-       см. объявление "std::shared_ptr<sqlite3_stmt>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(722,41): warning C4251: SQLite::Statement::mColumnNames: class "std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Statement"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(722,18):
-       см. объявление "std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Column.h(231,33): warning C4251: SQLite::Column::mStmtPtr: class "std::shared_ptr<sqlite3_stmt>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Column"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Statement.h(661,32):
-       см. объявление "std::shared_ptr<sqlite3_stmt>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(620,41): warning C4251: SQLite::Database::mSQLitePtr: class "std::unique_ptr<sqlite3,SQLite::Database::Deleter>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Database"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(620,10):
-       см. объявление "std::unique_ptr<sqlite3,SQLite::Database::Deleter>"
-  
-C:\Users\smira\source\repos\serverCPP\server\vcpkg_installed\x64-windows\x64-windows\include\SQLiteCpp\Database.h(621,41): warning C4251: SQLite::Database::mFilename: class "std::basic_string<char,std::char_traits<char>,std::allocator<char>>" должен иметь dll-интерфейс для использования клиентами class "SQLite::Database"
-  (компиляция исходного файла "DataStorage.cpp")
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\xstring(5127,29):
-       см. объявление "std::basic_string<char,std::char_traits<char>,std::allocator<char>>"
-  
-  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
-  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
-  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
-  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(3835,35): warning C4267: аргумент: преобразование из "size_t" в "uint32_t"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4317,32): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4830,33): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4849,48): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4851,53): warning C4267: аргумент: преобразование из "size_t" в "_Ty"; возможна потеря данных
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4851,53): warning C4267:         with
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4851,53): warning C4267:         [
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4851,53): warning C4267:             _Ty=int
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4851,53): warning C4267:         ]
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(4952,94): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(5100,54): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(5111,54): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(5129,54): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(5140,54): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(6584,32): warning C4244: =: преобразование "__int64" в "unsigned long", возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(6604,32): warning C4244: =: преобразование "__int64" в "unsigned long", возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(9638,23): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12396,70): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12417,70): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12438,70): warning C4244: аргумент: преобразование "__int64" в "unsigned int", возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12460,61): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12476,61): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12491,61): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12546,53): warning C4267: +=: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12557,45): warning C4267: +=: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12810,101): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12810,87): warning C4267: аргумент: преобразование из "size_t" в "uint16_t"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12816,118): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(12877,111): warning C4267: аргумент: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13021,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13037,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  (компиляция исходного файла "DataStorage.cpp")
-  
-  Route.cpp
+﻿  Route.cpp
   Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
   - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
   - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
@@ -221,14 +94,15 @@ C:\Users\smira\source\repos\serverCPP\server\Route.cpp(16,29): warning C4244: и
 C:\Users\smira\source\repos\serverCPP\server\Route.cpp(17,31): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
 C:\Users\smira\source\repos\serverCPP\server\Route.cpp(141,27): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
 C:\Users\smira\source\repos\serverCPP\server\Route.cpp(142,27): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(240,29): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(262,27): warning C4101: e: неиспользованная локальная переменная
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(279,27): warning C4101: e: неиспользованная локальная переменная
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(305,51): warning C4244: аргумент: преобразование "int64_t" в "_Ty", возможна потеря данных
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(305,51): warning C4244:         with
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(305,51): warning C4244:         [
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(305,51): warning C4244:             _Ty=int
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(305,51): warning C4244:         ]
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(212,29): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(239,29): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(261,27): warning C4101: e: неиспользованная локальная переменная
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(278,27): warning C4101: e: неиспользованная локальная переменная
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(304,51): warning C4244: аргумент: преобразование "int64_t" в "_Ty", возможна потеря данных
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(304,51): warning C4244:         with
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(304,51): warning C4244:         [
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(304,51): warning C4244:             _Ty=int
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(304,51): warning C4244:         ]
 C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244: аргумент: преобразование "unsigned __int64" в "int", возможна потеря данных
   (компиляция исходного файла "Route.cpp")
       C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75):
@@ -237,7 +111,7 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Crow<>"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14964,14):
           во время компиляции функции-члена класс шаблон "void crow::Crow<>::run(void)"
-              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(418,13):
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(417,13):
               см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15001,1):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>"
@@ -247,7 +121,7 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13936,75): warning C4244
               см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::do_accept" в "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run"
               C:\Users\smira\source\repos\serverCPP\server\crow_all.h(15007,38):
               см. первую ссылку на "crow::Server<crow::Crow<>,crow::UnixSocketAcceptor,crow::UnixSocketAdaptor>::run" в "crow::Crow<>::run"
-              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(418,13):
+              C:\Users\smira\source\repos\serverCPP\server\Route.cpp(417,13):
               см. первую ссылку на "crow::Crow<>::run" в "Route::PORT"
           C:\Users\smira\source\repos\serverCPP\server\crow_all.h(14398,19):
           выполняется компиляция ссылки на экземпляр класс шаблон функции "crow::Connection<Adaptor,Handler>"
@@ -345,9 +219,8 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(11402,59): warning C4244
               F=Route::MessageRoute::<lambda_5>
           ]
   
-  Создание кода...
 C:\Users\smira\source\repos\serverCPP\server\Route.cpp(156): warning C4715: `Route::ContactsRoute'::`2'::<lambda_1>::operator(): значение возвращается не при всех путях выполнения
-C:\Users\smira\source\repos\serverCPP\server\Route.cpp(411): warning C4715: `Route::ChatRoute'::`2'::<lambda_2>::operator(): значение возвращается не при всех путях выполнения
+C:\Users\smira\source\repos\serverCPP\server\Route.cpp(410): warning C4715: `Route::ChatRoute'::`2'::<lambda_2>::operator(): значение возвращается не при всех путях выполнения
   server.vcxproj -> C:\Users\smira\source\repos\serverCPP\x64\Debug\server.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.

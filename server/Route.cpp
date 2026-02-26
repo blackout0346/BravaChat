@@ -146,11 +146,11 @@ void Route::ContactsRoute()
                 }
                 db.InsertContact(user1, user2);
                 return crow::response(201, "contact added");
-               
             }
             catch(exception& e)
             {
                 cout << "Error /contact: " << e.what() << endl;
+         
             }
 
         });
@@ -209,8 +209,7 @@ void Route::UsersRoute()
             string email = x["emails"].s();      
 
           
-            string numStr = x["numbers"].s();
-            int NumberPhone = std::stoi(numStr);
+            int NumberPhone = x["numbers"].i();
 
          
             string photo = "";

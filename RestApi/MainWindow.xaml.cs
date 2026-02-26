@@ -70,8 +70,9 @@ namespace RestApi
             RestResponse response = await restClient.ExecuteAsync(PostRequest);
             if (response.IsSuccessStatusCode)
             {
-                Contacts contacts = new Contacts();
+                Contacts contacts = new Contacts(logins.Login);
                 contacts.Show();
+                
                  
             }
             else if(response.StatusCode == HttpStatusCode.Unauthorized)
