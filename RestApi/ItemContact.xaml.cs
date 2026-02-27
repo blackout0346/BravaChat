@@ -23,30 +23,16 @@ namespace RestApi
     /// </summary>
     public partial class ItemContact : UserControl
     {
-        RestClient restClient = new RestClient("http://127.0.0.1:18080");
-        private string contactName;
-        struct UserNames
-        {
-            public string Name { get; set; }
-        }
+        public int ContactId { get; set; }
 
-        public ItemContact(string item)
+        public ItemContact(int id, string name)
         {
-            contactName = item;
             InitializeComponent();
-            SelectUsers(contactName);
+   
+            this.ContactId = id;
+            this.UserName.Content = name;
         }
 
-        public async void SelectUsers(string contactname)
-        {
-            RestRequest ContactRequest = new RestRequest("/Contact", Method.Get);
-            UserNames userNames = new UserNames() { Name = restClient.GetAsync(ContactRequest).ToString() };
-
-            RestResponse ContactResponse = await restClient.ExecuteAsync<UserNames>(ContactRequest);
-            if (ContactResponse.IsSuccessStatusCode)
-            {
-                UserName.Content = ContactResponse.Content;
-            }
-        }
+   
     }
 }

@@ -16,19 +16,20 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
 
 
 
         <Label FontSize="24" FontFamily="Century Gothic" Foreground="White" Content="BravaChat" Grid.Column="0" Grid.ColumnSpan="2" Width="auto" Height="50" Background="#FF6CBEE8" />
         <Button x:Name="Exit"  Grid.Column="0" Grid.ColumnSpan="1" Margin="149,10,182,15" Content="Выйти" Click="Exit_Click" Background="White"/>
-        <Button  x:Name="CreateChat" Grid.Column="0" Grid.ColumnSpan="1" Margin="226,10,105,15" Content="Создать чать"  Background="White"/>
-        <ListBox x:Name="BoxContact" Grid.Row="2"></ListBox>
-        <Label x:Name="UserName" Grid.Column="1" Content=""> </Label>
-        <Frame Grid.Column="0">
+        <Button  x:Name="CreateChat" Grid.Column="0" Grid.ColumnSpan="1" Margin="226,10,105,15" Click="CreateChat_Click" Content="Создать чать"  Background="White"/>
+        <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged"></ListBox>
+        <Label x:Name="UserName" Grid.Column="1" Content="b"> </Label>
+        <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
+        <Frame Grid.Column="0" >
            
         </Frame>
-
+    
     </Grid>
 </Window>

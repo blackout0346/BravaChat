@@ -57,56 +57,64 @@ void DataStorage::DeleteContact(int UserId1, int UserId2)
 
 void DataStorage::InsertMessage(int userId, int chatId, string Message, int replyId, int ForwardId)
 {
-	SQLite::Statement query(db, "INSERT INTO Message(UserId, ChatId,SendDate, Message, ReplyId, ForwardId)VALUES(?, ?, ?, ?, ?, ?)");
-	query.bind(1, userId);
-	query.bind(2, chatId);
-	query.bind(3, getDateTime());
-	query.bind(4, Message);
-	if (replyId != 0)
-	{
-		query.bind(5, replyId);
-	}
-	if (replyId != 0)
-	{
-		query.bind(6, replyId);
-	}
-	if (replyId != 0)
-	{
-		query.bind(7, replyId);
-	}
-	query.exec();
+	try {
+		SQLite::Statement query(db, "INSERT INTO Message(UserId, ChatId,SendDate, Message, ReplyId, ForwardId)VALUES(?, ?, ?, ?, ?, ?)");
+		query.bind(1, userId);
+		query.bind(2, chatId);
+		query.bind(3, getDateTime());
+		query.bind(4, Message);
+		if (replyId != 0)
+		{
+			query.bind(5, replyId);
+		}
+		else {
+			query.bind(5, 0);
+		}
+		if (ForwardId != 0)
+		{
+			query.bind(6, replyId);
+		}
+		else {
+			query.bind(6, 0);
+		}
 
+		query.exec();
+	}
+	catch (exception& e) {
+		std::cout << "SQL Insert Error: " << e.what() << std::endl;
+	}
 }
 
 crow::json::wvalue DataStorage::GetMessages(crow::json::wvalue msg , int chatId)
 {
 	std::vector<crow::json::wvalue> rows;
-	SQLite::Statement query(db, "SELECT M.Id, M.UserId, U.Login, M.chatId, M.SendDate, M.Message, M.ReplyId, M.ForwardId, M.EditText FROM Message AS M INNER JOIN Users AS U ON U.Id = M.UserId WHERE m.chatId = ? ORDER BY SendDate ASC");
+	SQLite::Statement query(db, "SELECT M.Id, M.UserId, U.Login, M.chatId, M.SendDate, M.Message, M.ReplyId, M.ForwardId, M.EditedAt FROM Message AS M INNER JOIN Users AS U ON U.Id = M.UserId WHERE m.chatId = ? ORDER BY SendDate ASC");
 	query.bind(1, chatId);
 	while (query.executeStep())
 	{
 		crow::json::wvalue row;
 		row["Id"] = query.getColumn(0).getInt();
-		row["chatId"] = query.getColumn(1).getInt();
-		row["SendDate"] = query.getColumn(2).getText();
-		row["Message"] = query.getColumn(3).getText();
+		row["userId"] = query.getColumn(1).getInt();
+		row["Login"] = query.getColumn(2).getText();
+		row["chatId"] = query.getColumn(3).getInt();
+		row["SendDate"] = query.getColumn(4).getText();
+		row["message"] = query.getColumn(5).getText();
 	
-		if (!query.getColumn(4).isNull())
-		{
-			row["Replyid"] = query.getColumn(4).getInt();
-		}
-		if (!query.getColumn(5).isNull())
-		{
-			row["ForwardId"] = query.getColumn(5).getInt();
-		}
 		if (!query.getColumn(6).isNull())
 		{
-			row["EditText"] = query.getColumn(6).getText();
+			row["Replyid"] = query.getColumn(6).getInt();
+		}
+		if (!query.getColumn(7).isNull())
+		{
+			row["ForwardId"] = query.getColumn(7).getInt();
+		}
+		if (!query.getColumn(8).isNull())
+		{
+			row["EditedAt"] = query.getColumn(8).getText();
 		}
 		rows.push_back(move(row));
 	}
-	msg["list"] = std::move(rows); 
-	return msg;
+	return crow::json::wvalue(std::move(rows));
 
 }
 
@@ -133,7 +141,7 @@ void DataStorage::InsertContact(int userId1, int userId2)
 
 crow::json::wvalue DataStorage::GetContact(int userId, vector<crow::json::wvalue> contacts)
 {
-	SQLite::Statement query(db, "SELECT U.Id, U.Login FROM Users AS U"
+	SQLite::Statement query(db, "SELECT U.Id, U.Login FROM Users AS U "
 		"INNER JOIN Contact AS C ON (C.UserId2 =U.Id AND C.UserId1 = ?)");
 	query.bind(1, userId);
 	while (query.executeStep())
@@ -200,7 +208,7 @@ crow::json::wvalue DataStorage::setUserId(crow::json::wvalue users, int userId)
 	if (query.executeStep())
 	{
 		users["Id"] = query.getColumn(0).getInt();
-		users["Login"] = query.getColumn(1).getInt();
+		users["Login"] = query.getColumn(1).getText();
 
 	}
 	return users;

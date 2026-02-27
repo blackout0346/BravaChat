@@ -18,7 +18,15 @@ namespace RestApi
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         string inputsName = null;
         string inputsPassword = null;
+        
+        public class UserResponse
+        {
+            [JsonPropertyName("Id")]
+            public int Id { get; set; }
 
+            [JsonPropertyName("Login")]
+            public string Login { get; set; }
+        }
         class Logins
         {
             [JsonPropertyName("Login")]
@@ -26,7 +34,7 @@ namespace RestApi
             [JsonPropertyName("Password")]
             public string Password { get; set; }
             [JsonPropertyName("NumberPhone")]
-            public string NumberPhone {  get; set; }
+            public int NumberPhone {  get; set; }
         }
         public MainWindow()
         {
@@ -42,7 +50,6 @@ namespace RestApi
             if (!string.IsNullOrEmpty(inputsName) && !string.IsNullOrEmpty(inputsPassword))
             {
                 SETLOGIN(inputsName, inputsPassword);
-                MessageBox.Show($" {inputsName},{inputsPassword}Что тут внутри?");
                 inputName.Text = " ";
                 inputPassword.Text = " ";
             }
@@ -62,33 +69,42 @@ namespace RestApi
             {
                 Login = inputsName,
                 Password = inputsPassword,
-                NumberPhone = "0"
+                NumberPhone = 0
             };
-            RestRequest PostRequest = new RestRequest("/login", Method.Post);
-            
-            PostRequest.AddJsonBody(logins);
-            RestResponse response = await restClient.ExecuteAsync(PostRequest);
-            if (response.IsSuccessStatusCode)
-            {
-                Contacts contacts = new Contacts(logins.Login);
-                contacts.Show();
-                
-                 
-            }
-            else if(response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-             
-                MessageBox.Show($"Неверный логин или пароль {response.Content}");
-            }
-            else
-            {
+       
+                RestRequest PostRequest = new RestRequest("/login", Method.Post);
 
-                MessageBox.Show($"Такого пользователя нет {response.Content}");
+                PostRequest.AddJsonBody(logins);
+                var response = await restClient.ExecuteAsync(PostRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                try {
+                    var userData = JsonSerializer.Deserialize<UserResponse>(response.Content);
+                    Contacts contacts = new Contacts(userData.Id);
+                    contacts.Show();
+                    this.Close();
+                }
+                catch(JsonException)
+                {
+                    MessageBox.Show("Сервер прислал некорректный JSON, хотя статус 200"); 
+                }
+
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+
+                    MessageBox.Show($"Неверный логин или пароль {response.Content}");
+                }
+                else
+                {
+
+                MessageBox.Show($"Ошибка сервера: {response.Content}");
             }
+            
         }
         private async void click_Click(object sender, RoutedEventArgs e)
         {
-            //GetRequest();
+
             setinput();
 
         }

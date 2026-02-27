@@ -25,6 +25,14 @@ namespace RestApi
     public partial class authification : Window
     {
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
+        public class AuthResponses
+        {
+            [JsonPropertyName("Id")]
+            public int Id { get; set; }
+            [JsonPropertyName("message")]
+            public string Message { get; set; }
+
+        }
         class AuthificationData
         {
             [JsonPropertyName("Login")]
@@ -46,6 +54,7 @@ namespace RestApi
         private string emails = null;
         private string passwords = null;
         private string numbers = null;
+
         
         public authification()
         {
@@ -92,6 +101,7 @@ namespace RestApi
 
             }
         }
+
         private async void AuthResponse(string name, string email, string password, int number)
         {
 
@@ -104,21 +114,24 @@ namespace RestApi
                 photo = ""
 
             };
+    
             RestRequest AuthRequest = new RestRequest("/auth", Method.Post);
            
             AuthRequest.AddJsonBody(NewAuthUser);
-            RestResponse AuthResponse = await restClient.ExecuteAsync(AuthRequest);
-            if(AuthResponse.IsSuccessStatusCode)
+            var response = await restClient.ExecuteAsync<AuthResponses>(AuthRequest);
+            if(response.IsSuccessStatusCode && response.Data != null)
             {
-                Contacts contacts = new Contacts(NewAuthUser.Login);
+                int registeredId = response.Data.Id;
+                Contacts contacts = new Contacts(registeredId);
                 contacts.Show();
-                var data = AuthResponse.Content;
-                MessageBox.Show($"{data}");
+                MessageBox.Show($"Успешная регистрация! Ваш ID: {registeredId}");
+                this.Close();
             }
             else
             {
-                MessageBox.Show($"Сервер вернул ошибку: {AuthResponse.Content}");
+                MessageBox.Show($"Сервер вернул ошибку: {response.ErrorMessage ?? response.Content}");
             }
+            
         }
    
         private void click_Click(object sender, RoutedEventArgs e)

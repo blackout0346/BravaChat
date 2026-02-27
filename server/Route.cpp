@@ -6,22 +6,26 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/users/messages").methods("POST"_method)([&](const crow::request req)
         {
             try {
-                crow::json::rvalue x = crow::json::load(req.body);
-                if (!x.has("userId") || !x.has("chatId") || !x.has("Message"))
-                {
+                std::cout << "Raw JSON: " << req.body << std::endl; 
+
+                auto x = crow::json::load(req.body);
+                if (!x) return crow::response(400, "Invalid JSON");
+
+
+                if (!x.has("userId") || !x.has("chatId") || !x.has("message")) {
                     return crow::response(400, "fail req");
                 }
                 int userId = x["userId"].i();
                 int chatId = x["chatId"].i();
                 int replyId = x["replyId"].i();
                 int forwardId = x["forwardId"].i();
-                string Message = x["Message"].s();
+                string Message = x["message"].s();
 
                 db.InsertMessage(userId, chatId, Message, replyId, forwardId);
                 int messageId = static_cast<int>(db.db.getLastInsertRowid());
                 crow::json::wvalue response;
                 response["Id"] = messageId;
-                response["Message"] = "Message sent";
+                response["message"] = "Message sent";
                 return crow::response(201, response);
                 
             }
@@ -35,9 +39,8 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/users/messages/chat/<int>")([&](int chatId)
         {
             try {
-                crow::json::wvalue msg;
-           
-                auto result = db.GetMessages(move(msg), chatId);
+
+                auto result = db.GetMessages(crow::json::wvalue(), chatId);
            
                 return crow::response(200, result);
 
@@ -226,7 +229,9 @@ void Route::UsersRoute()
 
         }
         catch (exception& e) {
-            return crow::response(400, e.what());
+            crow::json::wvalue error_res;
+            error_res["error"] = e.what(); 
+            return crow::response(400, error_res);
         }
         });
     CROW_ROUTE(app, "/login").methods("POST"_method)([&](const crow::request& req) {

@@ -13,8 +13,37 @@
             <RowDefinition>
             </RowDefinition>
         </Grid.RowDefinitions>
-        <Rectangle Grid.Row="0" Height="100" Margin="0,0,0,125" Fill="#FF6CBEE8" />
+        <ListBox x:Name="MessagesList" Grid.Row="0" Grid.RowSpan="2" BorderThickness="0" Background="#F0F0F0" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="{Binding Alignment}" Margin="10,5">
+                        <Border CornerRadius="10" Padding="10" Background="{Binding BubbleColor}" MaxWidth="500">
+                            <StackPanel>
+                                <TextBlock Text="{Binding msg}" FontSize="14" TextWrapping="Wrap" Foreground="Black"/>
+                                <TextBlock Text="{Binding senddate}" FontSize="10" Foreground="Gray" HorizontalAlignment="Right" Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+       
         <TextBox x:Name="InputMsg" Grid.Row="1" Background="#80C8ED" Width="700" Height="50" Margin="21,165,79,10"  ></TextBox>
         <Button x:Name="sendMessage" Grid.Row="1"  Width="50" Height="50" Margin="726,165,24,10" Content="Send" Click="sendMessage_Click" Background="White" Focusable="False" FontFamily="Segoe UI Variable Text Semibold" FontSize="14" />
+        <Label x:Name="ContactName" Grid.Column="0" Grid.Row="0" Content="user"></Label>
     </Grid>
 </UserControl>

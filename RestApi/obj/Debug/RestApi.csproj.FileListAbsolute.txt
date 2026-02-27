@@ -203,3 +203,5 @@ C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemContact.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\UserControl1.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemContact.baml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\UserControl1.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddUsers.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddUsers.baml
