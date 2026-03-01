@@ -23,14 +23,14 @@ namespace RestApi
     /// </summary>
     public partial class ItemContact : UserControl
     {
-        public int ContactId { get; set; }
+        public int chatId { get; set; }
 
         public ItemContact(int id, string name)
         {
             InitializeComponent();
    
-            this.ContactId = id;
-            this.UserName.Content = name;
+            this.chatId = id;
+            this.UserName.Content  = name;
         }
 
    

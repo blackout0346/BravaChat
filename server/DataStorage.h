@@ -21,7 +21,7 @@ public:
 	crow::json::wvalue GetMessages(crow::json::wvalue  msg, int chatId);
 	void InsertChat(int userId, int chatId, string Messages);
 	void InsertContact(int userId1, int userId2);
-	crow::json::wvalue GetContact(int userId, vector<crow::json::wvalue> contacts);
+	crow::json::wvalue GetContact(int userId);
 	crow::json::wvalue SelectLogin(string login, string password, int number);
 	void InsertAuth(string login, string password, string email, int number, string photo);
 	string getDateTime();

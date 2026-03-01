@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="RestApi.PanelPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestApi"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="200"
+             Background="White">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>
+            </ColumnDefinition>
+            <ColumnDefinition>
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition>
+            </RowDefinition>
+            <RowDefinition>
+
+            </RowDefinition>
+            <RowDefinition>
+
+            </RowDefinition>
+            <RowDefinition>
+
+            </RowDefinition>
+            <RowDefinition>
+
+            </RowDefinition>
+        </Grid.RowDefinitions>
+        <Label x:Name="UserName" Grid.Column="1"  Content="user" ></Label>
+        <Button x:Name="createchat" Grid.Row="1" Grid.ColumnSpan="2" Width="200" Height="20" Content="Создать чат" Click="createchat_Click"></Button>
+        <Button x:Name="exit" Grid.Row="2" Grid.ColumnSpan="2" Width="200" Height="20" Content="Выйти" Click="exit_Click"></Button>
+    </Grid>
+</UserControl>

@@ -21,15 +21,17 @@
 
 
 
-        <Label FontSize="24" FontFamily="Century Gothic" Foreground="White" Content="BravaChat" Grid.Column="0" Grid.ColumnSpan="2" Width="auto" Height="50" Background="#FF6CBEE8" />
-        <Button x:Name="Exit"  Grid.Column="0" Grid.ColumnSpan="1" Margin="149,10,182,15" Content="Выйти" Click="Exit_Click" Background="White"/>
-        <Button  x:Name="CreateChat" Grid.Column="0" Grid.ColumnSpan="1" Margin="226,10,105,15" Click="CreateChat_Click" Content="Создать чать"  Background="White"/>
+
+        <Rectangle  Grid.ColumnSpan="2" Width="auto" Height="50" Fill="#FF6CBEE8" ></Rectangle>
+        <Button x:Name="buttonPanel" Grid.Column="0" Width="60" Height="40" Margin="0,0,350,0" Click="Button_Click" >
+            <Button.Background>
+                <ImageBrush ImageSource="/ButtonPanel.png"/>
+            </Button.Background>
+        </Button>
+
         <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged"></ListBox>
-        <Label x:Name="UserName" Grid.Column="1" Content="b"> </Label>
+        <Label x:Name="UserName" Grid.Column="1" Content="b"></Label>
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
-        <Frame Grid.Column="0" >
-           
-        </Frame>
-    
+        <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
     </Grid>
 </Window>

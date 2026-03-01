@@ -94,7 +94,7 @@ crow::json::wvalue DataStorage::GetMessages(crow::json::wvalue msg , int chatId)
 	{
 		crow::json::wvalue row;
 		row["Id"] = query.getColumn(0).getInt();
-		row["userId"] = query.getColumn(1).getInt();
+		row["UserId"] = query.getColumn(1).getInt();
 		row["Login"] = query.getColumn(2).getText();
 		row["chatId"] = query.getColumn(3).getInt();
 		row["SendDate"] = query.getColumn(4).getText();
@@ -139,19 +139,23 @@ void DataStorage::InsertContact(int userId1, int userId2)
 	query.exec();
 }
 
-crow::json::wvalue DataStorage::GetContact(int userId, vector<crow::json::wvalue> contacts)
+crow::json::wvalue DataStorage::GetContact(int userId)
 {
-	SQLite::Statement query(db, "SELECT U.Id, U.Login FROM Users AS U "
-		"INNER JOIN Contact AS C ON (C.UserId2 =U.Id AND C.UserId1 = ?)");
+	vector<crow::json::wvalue> contacts;
+	SQLite::Statement query(db, "SELECT C.Id, U.Id, U.Login FROM Users AS U "
+		"INNER JOIN Contact AS C ON (U.Id = C.UserId2 AND C.UserId1 = ?) OR (U.Id = C.UserId1 AND C.UserId2 = ?) ");
 	query.bind(1, userId);
+	query.bind(2, userId);
 	while (query.executeStep())
 	{
 		crow::json::wvalue contact;
-		contact["Id"] = query.getColumn(0).getInt();
-		contact["Login"] = query.getColumn(1).getText();
+		contact["contactId"] = query.getColumn(0).getInt();
+		contact["partnerId"] = query.getColumn(1).getInt();
+		contact["login"] = query.getColumn(2).getText();
+
 		contacts.push_back(move(contact));
 	}
-	return contacts;
+	return crow::json::wvalue(move(contacts));
 }
 
 

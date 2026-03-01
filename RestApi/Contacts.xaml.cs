@@ -25,6 +25,8 @@ namespace RestApi
   
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         private int UserId;
+ 
+        bool isclose = false;
         public class UserDto
         {
             [JsonPropertyName("Login")]
@@ -32,16 +34,17 @@ namespace RestApi
         }
         public class ContactDto
         {
-            [JsonPropertyName("Login")]
+            [JsonPropertyName("chatId")]
+            public int ChatId { get; set; }
+
+            [JsonPropertyName("partnerId")] 
+            public int PartnerId { get; set; }
+
+            [JsonPropertyName("login")]
             public string Login { get; set; }
-            [JsonPropertyName("Id")]
-            public int Id { get; set; }
+        
         }
-        public class ContactsResponse
-        {
-            [JsonPropertyName("Contact")]
-            public List<ContactDto> ContactDto { get; set; }
-        }
+ 
 
         public Contacts(int userId)
         {
@@ -49,6 +52,7 @@ namespace RestApi
 
             UserId = userId;
             LoadData();
+         
         }
         private async void LoadData()
         {
@@ -58,13 +62,13 @@ namespace RestApi
         private async Task GetCurrentUserName()
         {
             RestRequest request = new RestRequest($"/users/{UserId}", Method.Get);
-            var response = await restClient.ExecuteAsync(request); // Выполняем без <UserDto> сначала
+            var response = await restClient.ExecuteAsync(request); 
 
             if (response.IsSuccessStatusCode)
             {
 
                 var data = System.Text.Json.JsonSerializer.Deserialize<UserDto>(response.Content);
-                    UserName.Content = data.Login;
+                UserName.Content = data.Login;
             }
             else
             {
@@ -76,27 +80,40 @@ namespace RestApi
 
             RestRequest ContactRequest = new RestRequest($"/contacts/{UserId}", Method.Get);
 
-            var ContactResponse = await restClient.ExecuteAsync<ContactsResponse>(ContactRequest);
+            var ContactResponse = await restClient.ExecuteAsync<List<ContactDto>>(ContactRequest);
 
        
-            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data != null && ContactResponse.Data.ContactDto != null)
+            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data != null && ContactResponse.Data != null)
             {
                 BoxContact.Items.Clear();
 
-                foreach (var contactData in ContactResponse.Data.ContactDto)
+                foreach (var contactData in ContactResponse.Data)
                 {
-                    ItemContact itemContact = new ItemContact(contactData.Id,contactData.Login);
+                    ItemContact itemContact = new ItemContact(contactData.ChatId,contactData.Login);
                     BoxContact.Items.Add(itemContact);
                 }
             }
             else
             {
-                MessageBox.Show("Не удалось загрузить контакты");
+                MessageBox.Show("Не удалось загрузить контакты. Код: " + ContactResponse.StatusCode);
                 return;
             }
         }
 
-      
+        void check()
+        {
+            PanelPage panelPage = new PanelPage();
+            Panel.Content = panelPage;
+            if (isclose)
+            {
+                Panel.Content = panelPage;
+            }
+            else
+            {
+               
+            }
+
+        }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -116,15 +133,25 @@ namespace RestApi
        
             if (BoxContact.SelectedItem is ItemContact item)
             {
-                int idforChat = item.ContactId;
-                UserControl1 chat = new UserControl1(this.UserId, idforChat);
+                int chatId = item.chatId;
+                UserControl1 chat = new UserControl1(this.UserId, chatId);
                 ChatDisplay.Content = chat;
             }
             else
             {
-                // Если попали сюда — значит тип данных не совпал
+                
                 MessageBox.Show("Выбранный элемент не является контактом");
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+          
+            //check();
+          
+
+    
+     
         }
     }
 }
