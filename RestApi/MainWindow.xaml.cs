@@ -102,7 +102,7 @@ namespace RestApi
             }
             
         }
-        private async void click_Click(object sender, RoutedEventArgs e)
+        private void click_Click(object sender, RoutedEventArgs e)
         {
 
             setinput();

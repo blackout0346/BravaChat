@@ -30,7 +30,7 @@ namespace RestApi
             InitializeComponent();
    
             this.chatId = id;
-            this.UserName.Content  = name;
+            this.UserName.Content = name;
         }
 
    

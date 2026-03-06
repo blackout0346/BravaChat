@@ -24,8 +24,9 @@ public:
 	crow::json::wvalue GetContact(int userId);
 	crow::json::wvalue SelectLogin(string login, string password, int number);
 	void InsertAuth(string login, string password, string email, int number, string photo);
+	void AddContact(int u1, int u2);
 	string getDateTime();
 	crow::json::wvalue setUserId(crow::json::wvalue user,int userId);
-	crow::json::wvalue SearchLogin(crow::json::wvalue user, string search);
+	crow::json::wvalue SearchLogin( string search);
 };
 

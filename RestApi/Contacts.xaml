@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestApi"
         mc:Ignorable="d"
-        Title="Contacts" Height="600" Width="1200">
+        Title="Contacts" Height="600" Width="1300"
+        MinHeight="600" MinWidth="1300">
+        
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400">
-
             </ColumnDefinition>
-            <ColumnDefinition>
+            <ColumnDefinition Width="*">
             </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -33,5 +34,6 @@
         <Label x:Name="UserName" Grid.Column="1" Content="b"></Label>
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
         <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
+        <Button Grid.Row="0" Grid.Column="0" Margin="5" Width="50" Content="добавить" Click="Button_Click_1" ></Button>
     </Grid>
 </Window>

@@ -96,7 +96,6 @@ C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\System.Text.Encodings.We
 C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\System.Text.Json.xml
 C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\System.Threading.Tasks.Extensions.xml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.csproj.AssemblyReference.cache
-C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.exe.config
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\MainWindow.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\App.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi_MarkupCompile.cache
@@ -207,3 +206,6 @@ C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddUsers.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddUsers.baml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\PanelPage.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\PanelPage.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddItemUser.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddItemUser.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.exe.config

@@ -125,6 +125,7 @@ C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13021,24): warning C4267
 C:\Users\smira\source\repos\serverCPP\server\crow_all.h(13037,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "DataStorage.cpp")
   
+C:\Users\smira\source\repos\serverCPP\server\DataStorage.cpp(221,16): warning C4244: инициализация: преобразование "int64_t" в "int", возможна потеря данных
   server.vcxproj -> C:\Users\smira\source\repos\serverCPP\x64\Debug\server.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.

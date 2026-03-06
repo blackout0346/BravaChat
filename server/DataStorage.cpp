@@ -58,7 +58,7 @@ void DataStorage::DeleteContact(int UserId1, int UserId2)
 void DataStorage::InsertMessage(int userId, int chatId, string Message, int replyId, int ForwardId)
 {
 	try {
-		SQLite::Statement query(db, "INSERT INTO Message(UserId, ChatId,SendDate, Message, ReplyId, ForwardId)VALUES(?, ?, ?, ?, ?, ?)");
+		SQLite::Statement query(db, "INSERT INTO Message(UserId, chatId,SendDate, Message, ReplyId, ForwardId)VALUES(?, ?, ?, ?, ?, ?)");
 		query.bind(1, userId);
 		query.bind(2, chatId);
 		query.bind(3, getDateTime());
@@ -132,26 +132,46 @@ void DataStorage::InsertChat(int userId, int chatId, string Messages)
 
 void DataStorage::InsertContact(int userId1, int userId2)
 {
-	SQLite::Statement query(db, "INSERT INTO Contact(UserId1, UserId2, createAt) VALUES(?,?,?)");
+	SQLite::Statement check(db, "SELECT COUNT(*) FROM Contact WHERE (UserId1=? AND UserId2=?) OR (UserId1=? AND UserId2=?)");
+	check.bind(1, userId1);
+	check.bind(2, userId2);
+	check.bind(3, userId2);
+	check.bind(4, userId1);
+
+	check.executeStep();
+	if (check.getColumn(0).getInt() > 0) {
+		return; 
+	}
+	db.exec("INSERT INTO Chats (typeId) VALUES (1)");
+
+
+	int newChatId = static_cast<int>(db.getLastInsertRowid());
+
+	
+	SQLite::Statement query(db, "INSERT INTO Contact(UserId1, UserId2, createAt, chatId) VALUES(?,?,?,?)");
 	query.bind(1, userId1);
 	query.bind(2, userId2);
 	query.bind(3, getDateTime());
+	query.bind(4, newChatId); 
 	query.exec();
 }
 
 crow::json::wvalue DataStorage::GetContact(int userId)
 {
 	vector<crow::json::wvalue> contacts;
-	SQLite::Statement query(db, "SELECT C.Id, U.Id, U.Login FROM Users AS U "
-		"INNER JOIN Contact AS C ON (U.Id = C.UserId2 AND C.UserId1 = ?) OR (U.Id = C.UserId1 AND C.UserId2 = ?) ");
+	SQLite::Statement query(db,
+		"SELECT U.Login, C.chatId FROM Contact C "
+		"JOIN Users U ON (U.Id = C.UserId1 OR U.Id = C.UserId2) "
+		"WHERE (C.UserId1 = ? OR C.UserId2 = ?) AND U.Id != ?");
 	query.bind(1, userId);
 	query.bind(2, userId);
+	query.bind(3, userId);
 	while (query.executeStep())
 	{
 		crow::json::wvalue contact;
-		contact["contactId"] = query.getColumn(0).getInt();
-		contact["partnerId"] = query.getColumn(1).getInt();
-		contact["login"] = query.getColumn(2).getText();
+		contact["login"] = query.getColumn(0).getText();
+		contact["chatId"] = query.getColumn(1).getInt();
+
 
 		contacts.push_back(move(contact));
 	}
@@ -195,6 +215,19 @@ void DataStorage::InsertAuth(string login, string password, string email, int nu
 
 }
 
+void DataStorage::AddContact(int u1, int u2)
+{
+	db.exec("INSERT INTO Chats (typeId) VALUES(1)");
+	int newChatId = db.getLastInsertRowid();
+
+	SQLite::Statement query(db, "INSERT INTO Contact (UserId1, UserId2, createAt, chatId) VALUES (?,?,?,?)");
+	query.bind(1, u1);
+	query.bind(2, u2);
+	query.bind(3, getDateTime());
+	query.bind(4, newChatId);
+	query.exec();
+}
+
 string DataStorage::getDateTime()
 {
 	auto date = chrono::system_clock::now();
@@ -220,7 +253,7 @@ crow::json::wvalue DataStorage::setUserId(crow::json::wvalue users, int userId)
 
 }
 
-crow::json::wvalue DataStorage::SearchLogin(crow::json::wvalue user, string search)
+crow::json::wvalue DataStorage::SearchLogin( string search)
 {
 	vector<crow::json::wvalue> users;
 	SQLite::Statement query(db, "SELECT Id, Login FROM Users WHERE Login LIKE ? LIMIT 20");
@@ -228,10 +261,11 @@ crow::json::wvalue DataStorage::SearchLogin(crow::json::wvalue user, string sear
 
 	while (query.executeStep())
 	{
-		user["Id"] = query.getColumn(0).getInt();
-		user["Login"] = query.getColumn(1).getInt();
-		users.push_back(move(user));
+		crow::json::wvalue userrow;
+		userrow["Id"] = query.getColumn(0).getInt();
+		userrow["Login"] = query.getColumn(1).getText();
+		users.push_back(move(userrow));
 	}
-	return users;
+	return crow::json::wvalue(move(users));
 }
 

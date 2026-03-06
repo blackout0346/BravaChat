@@ -99,20 +99,25 @@ namespace RestApi
                 return;
             }
         }
-
-        void check()
+        private async void GetContact()
         {
-            PanelPage panelPage = new PanelPage();
-            Panel.Content = panelPage;
-            if (isclose)
+            try
             {
-                Panel.Content = panelPage;
+                var request = new RestRequest($"/contacts/{this.UserId}", Method.Get);
+                var response = await restClient.ExecuteAsync<List<ContactDto>>(request);
+                if(response.IsSuccessStatusCode && response.Data != null)
+                {
+                    BoxContact.Items.Clear();
+                    foreach(var contactData in response.Data)
+                    {
+                        ItemContact item = new ItemContact(contactData.ChatId, contactData.Login);
+                        BoxContact.Items.Add(item);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-               
             }
-
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -122,11 +127,7 @@ namespace RestApi
             Close();
         }
 
-        private void CreateChat_Click(object sender, RoutedEventArgs e)
-        {
-             AddUsers addUsers = new AddUsers();
-             addUsers.Show();
-        }
+
 
         private void BoxContact_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -148,10 +149,17 @@ namespace RestApi
         {
           
             //check();
-          
-
-    
      
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            AddUsers addUsers = new AddUsers(this.UserId);
+            addUsers.Closed += (s, args) =>
+            {
+                GetContact();
+            };
+            addUsers.Show();
         }
     }
 }

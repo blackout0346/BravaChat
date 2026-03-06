@@ -64,16 +64,16 @@ namespace RestApi
                         MessagesList.Items.Clear();
                         foreach (var m in response.Data)
                         {
-                            if (m.SenderId == Myid)
-                            {
-                                m.alignment = HorizontalAlignment.Right;
-                                m.bubbleColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DCF8C6"));
-                            }
-                            else
-                            {
-                                m.alignment = HorizontalAlignment.Left;
-                                m.bubbleColor = new SolidColorBrush(Colors.AliceBlue);
-                            }
+                            //if (m.SenderId == Myid)
+                            //{
+                            //    m.alignment = HorizontalAlignment.Right;
+                            //    m.bubbleColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DCF8C6"));
+                            //}
+                            //else
+                            //{
+                            //    m.alignment = HorizontalAlignment.Left;
+                            //    m.bubbleColor = new SolidColorBrush(Colors.AliceBlue);
+                            //}
                             MessagesList.Items.Add(m);
                         }
                         if (MessagesList.Items.Count > 0)
@@ -116,6 +116,7 @@ namespace RestApi
 
         private void sendMessage_Click(object sender, RoutedEventArgs e)
         {
+
             SetMessage();
         }
     }

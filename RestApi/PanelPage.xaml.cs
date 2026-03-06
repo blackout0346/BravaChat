@@ -34,8 +34,8 @@ namespace RestApi
 
         private void createchat_Click(object sender, RoutedEventArgs e)
         {
-            AddUsers addUsers = new AddUsers();
-            addUsers.Show();
+            //AddUsers addUsers = new AddUsers();
+            //addUsers.Show();
         }
     }
 }

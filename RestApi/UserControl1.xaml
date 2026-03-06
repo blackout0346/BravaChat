@@ -10,10 +10,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*">
             </RowDefinition>
-            <RowDefinition>
+            <RowDefinition Height="auto">
+            </RowDefinition>
+            <RowDefinition Height="auto">
             </RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox x:Name="MessagesList" Grid.Row="0" Grid.RowSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,50">
+        <ListBox x:Name="MessagesList" Grid.Row="0" Grid.RowSpan="3" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,0,0,50">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -25,8 +27,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBox  SpellCheck.IsEnabled="True" Language="ru-ru" x:Name="InputMsg" Grid.Row="1" Background="#80C8ED" Width="700" Height="50" Margin="0,175,100,0"  ></TextBox>
-        <Button x:Name="sendMessage" Grid.Row="1"  Width="50" Height="50" Margin="724,175,26,0" Content="Send" Click="sendMessage_Click" Background="White" Focusable="False" FontFamily="Segoe UI Variable Text Semibold" FontSize="14" />
+        <TextBox  SpellCheck.IsEnabled="True" Language="ru-ru" x:Name="InputMsg" Grid.Row="2" Background="#80C8ED" Width="auto" Height="50" Margin="0,0,50,0"  ></TextBox>
+        <Button x:Name="sendMessage" Grid.Row="2"  Width="auto" Height="50" Focusable="True" ClickMode="Press"  Click="sendMessage_Click" Content="Send" Background="White" FontFamily="Segoe UI Variable Text Semibold" FontSize="14" Margin="750,0,0,0" />
 
     </Grid>
 </UserControl>

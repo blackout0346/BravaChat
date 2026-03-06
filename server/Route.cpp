@@ -192,6 +192,30 @@ void Route::ContactsRoute()
             }
 
         });
+    CROW_ROUTE(app, "/contacts/add").methods("POST"_method)([&](const crow::request& req)
+        {
+            try {
+                auto x = crow::json::load(req.body);
+                std::cout << "Raw JSON: " << req.body << std::endl;
+                if (!x) {
+                    return crow::response(400);
+                }
+                if (!x.has("userId1") || !x.has("userId2"))
+                {
+                    return crow::response(400, "missing keys: userId1 or userId2");
+                }
+                int u1 = x["userId1"].i();
+                int u2 = x["userId2"].i();
+                db.AddContact(u1, u2);
+                return crow::response(200, "Contact Added");
+
+            }
+            catch (exception& e)
+            {
+                return crow::response(400, e.what());
+            }
+
+        });
 
 }
 void Route::UsersRoute()
@@ -273,19 +297,17 @@ void Route::UsersRoute()
         try
         {
 
-            crow::json::wvalue user;
-            auto result = db.SearchLogin(user, searchTerm);
-            crow::json::wvalue response;
-            response["users"] = move(result);
+       
+            auto result = db.SearchLogin( searchTerm);
+        
 
-
-            return crow::response(200, response);
+            return crow::response(200, result);
         }
         catch (exception& e) {
             return crow::response(400, "invalid login");
         }
 
-        });
+    });
 
 
 

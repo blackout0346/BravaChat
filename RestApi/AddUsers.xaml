@@ -13,13 +13,24 @@
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition ></ColumnDefinition>
-            <ColumnDefinition ></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="Добавить пользователя" Grid.Row="0" Grid.Column="0"></Label>
-        <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" Margin="10,61,130,59"></TextBlock>
-        <Button Grid.Column="0" Grid.Row="2" Height="50" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Выйти"></Button>
-        <Button x:Name="search" Grid.Column="1" Grid.Row="0" Margin="90,60,10,60" Content="search"></Button>
-        <ListBox x:Name="ListUsers" Grid.Row="1" Grid.ColumnSpan="2" Height="130"></ListBox>
+        <Label Content="Добавить друга" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF0AE3FF"></Label>
+        <TextBox x:Name="search" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,74,100,46" />
+        <TextBlock Text="Введите друга..." IsHitTestVisible="False" Foreground="Gray" Margin="20,74,83,46"  >
+            <TextBlock.Style >
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=search}" Value="">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <Button Grid.Column="0" Grid.Row="2" Height="auto" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Выйти"  Background="#FF0AE3FF" Click="Button_Click"></Button>
+        <ListBox x:Name="ListUsers" Grid.Row="1" Grid.ColumnSpan="2" Height="auto" Width="auto"></ListBox>
     </Grid>
 </Window>
