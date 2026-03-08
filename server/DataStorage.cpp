@@ -228,6 +228,16 @@ void DataStorage::AddContact(int u1, int u2)
 	query.exec();
 }
 
+void DataStorage::editMessage(int  messageId, string message)
+{
+	SQLite::Statement query(db,
+		"UPDATE Message SET Message = ?, EditedAt = ? WHERE Id = ?");
+	query.bind(1, message);
+	query.bind(2, getDateTime());
+	query.bind(3, messageId);
+	query.exec();
+}
+
 string DataStorage::getDateTime()
 {
 	auto date = chrono::system_clock::now();

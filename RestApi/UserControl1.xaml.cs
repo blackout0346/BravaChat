@@ -1,16 +1,18 @@
 ﻿using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using RestSharp;
 using System;
+using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using System.Windows.Threading;
+using static RestApi.authification;
 namespace RestApi
 {
     /// <summary>
@@ -21,6 +23,7 @@ namespace RestApi
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         private int Myid;
         private int ChatId;
+        public int MessageId;
         private DispatcherTimer dispatcherTimer;
         public class MessageItem
         {
@@ -37,6 +40,8 @@ namespace RestApi
             public string senddate { get; set; }
             public HorizontalAlignment alignment { get; set; }
             public SolidColorBrush bubbleColor { get; set; }
+            [JsonPropertyName("MessageId")]
+            public int messageId { get; set; }
         }
         
         public UserControl1(int myId, int chatId)
@@ -112,7 +117,33 @@ namespace RestApi
                 MessageBox.Show($"Ошибка: {response.StatusCode}\nОтвет сервера: {response.Content}");
             }
         }
-     
+        private async void EditMessage()
+        {
+
+
+          
+            RestRequest editRequest = new RestRequest($"/message/{MessageId}/edit", Method.Put);
+            var response = await restClient.ExecuteAsync<MessageItem>(editRequest);
+            MessageId = response.Data.messageId;
+            if (response.IsSuccessStatusCode)
+            {
+              var message = response.Data;
+              var edit = new MessageItem()
+              {
+                    msg = message.ToString()
+              };
+            }
+        }
+        private async void DeleteText()
+        {
+            RestRequest deleteRequest = new RestRequest($"/message/{MessageId}/delete", Method.Delete);
+            var response = await restClient.ExecuteAsync<MessageItem>(deleteRequest);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageId = response.Data.messageId;
+                MessagesList.Items.Remove(response.Data.msg);
+            }
+        }
 
         private void sendMessage_Click(object sender, RoutedEventArgs e)
         {

@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -126,7 +127,12 @@ namespace RestApi
             Logins.Show();
             Close();
         }
+        private async void DeleteContact()
+        {
+            //var request = new RestRequest($"/contacts/{UserId}/{}", Method.Delete);
 
+         
+        }
 
 
         private void BoxContact_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -124,7 +124,7 @@ namespace RestApi
                 int registeredId = response.Data.Id;
                 Contacts contacts = new Contacts(registeredId);
                 contacts.Show();
-                MessageBox.Show($"Успешная регистрация! Ваш ID: {registeredId}");
+
                 this.Close();
             }
             else

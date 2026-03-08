@@ -32,7 +32,7 @@
         <TextBox x:Name="inputPassword" Grid.Column="0" Grid.Row="2" Margin="18" Grid.ColumnSpan="2" />
         <TextBox x:Name="inputNumber" Grid.Column="0" Grid.Row="3" Margin="18" Grid.ColumnSpan="2"/>
         <TextBox x:Name="inputEmail" Grid.Column="0" Grid.Row="4" Margin="18" Grid.ColumnSpan="2" />
-        <Button x:Name="click" Grid.Row="5" Grid.Column="1" Click="click_Click" Content="Отправить на сервер" Grid.RowSpan="4"  />
-        <Button x:Name="close" Grid.Row="5"  Click="close_Click" Content="Выйти" Grid.RowSpan="2"  />
+        <Button x:Name="click" Grid.Row="5" Grid.Column="1" Click="click_Click" Content="Зарегистрироваться" Background="#FF0AE3FF" Grid.RowSpan="4"  />
+        <Button x:Name="close" Grid.Row="5"  Click="close_Click" Content="Выйти"  Background="#FF0AE3FF" Grid.RowSpan="2"  />
     </Grid>
 </Window>

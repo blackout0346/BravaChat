@@ -111,18 +111,14 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/message/<int>/edit").methods("PUT"_method)([&](const crow::request& req, int messageId)
         {
             auto body = crow::json::load(req.body);
-            if (!!body || !body.has("msg"))
+            if (!!body || !body.has("message"))
             {
                 return crow::response(400, "Missing message text");
             }
             try
             {
-                SQLite::Statement query(db.db,
-                    "UPDATE Message SET Message = ?, EditedAt = ? WHERE Id = ?");
-                query.bind(1, body["Message"].s());
-                query.bind(2, db.getDateTime());
-                query.bind(3, messageId);
-                query.exec();
+                db.editMessage(messageId, body["message"].s());
+           
                 return crow::response(200, "Message edited");
 
             }
@@ -224,6 +220,7 @@ void Route::UsersRoute()
 
 
         auto x = crow::json::load(req.body);
+        cout<<"raw json" << req.body << endl;
         if (!x) return crow::response(400, "Invalid JSON format");
 
         try {
@@ -298,9 +295,7 @@ void Route::UsersRoute()
         {
 
        
-            auto result = db.SearchLogin( searchTerm);
-        
-
+            auto result = db.SearchLogin(searchTerm);
             return crow::response(200, result);
         }
         catch (exception& e) {
