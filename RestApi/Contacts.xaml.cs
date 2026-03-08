@@ -36,7 +36,7 @@ namespace RestApi
         public class ContactDto
         {
             [JsonPropertyName("chatId")]
-            public int ChatId { get; set; }
+            public int chatId { get; set; }
 
             [JsonPropertyName("partnerId")] 
             public int PartnerId { get; set; }
@@ -84,13 +84,13 @@ namespace RestApi
             var ContactResponse = await restClient.ExecuteAsync<List<ContactDto>>(ContactRequest);
 
        
-            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data != null && ContactResponse.Data != null)
+            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data != null)
             {
                 BoxContact.Items.Clear();
 
                 foreach (var contactData in ContactResponse.Data)
                 {
-                    ItemContact itemContact = new ItemContact(contactData.ChatId,contactData.Login);
+                    ItemContact itemContact = new ItemContact(contactData.chatId,contactData.Login);
                     BoxContact.Items.Add(itemContact);
                 }
             }
@@ -111,7 +111,7 @@ namespace RestApi
                     BoxContact.Items.Clear();
                     foreach(var contactData in response.Data)
                     {
-                        ItemContact item = new ItemContact(contactData.ChatId, contactData.Login);
+                        ItemContact item = new ItemContact(contactData.chatId, contactData.Login);
                         BoxContact.Items.Add(item);
                     }
                 }

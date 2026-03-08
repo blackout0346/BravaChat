@@ -148,24 +148,34 @@ void DataStorage::InsertContact(int userId1, int userId2)
 	int newChatId = static_cast<int>(db.getLastInsertRowid());
 
 	
-	SQLite::Statement query(db, "INSERT INTO Contact(UserId1, UserId2, createAt, chatId) VALUES(?,?,?,?)");
+	SQLite::Statement query(db, "INSERT INTO UserChat(UserId, chatId, JonedAt) VALUES(?,?,?)");
 	query.bind(1, userId1);
-	query.bind(2, userId2);
+	query.bind(2, newChatId);
 	query.bind(3, getDateTime());
-	query.bind(4, newChatId); 
 	query.exec();
+	SQLite::Statement query2(db, "INSERT INTO UserChat(UserId, chatId, JonedAt) VALUES(?,?,?)");
+	query2.bind(1, userId2);
+	query2.bind(2, newChatId);
+	query2.bind(3, getDateTime());
+	query2.exec();
+	SQLite::Statement query3(db, "INSERT INTO Contact(UserId1, UserId2, createAt) VALUES(?,?,?)");
+	query3.bind(1, userId1);
+	query3.bind(2, userId2);
+	query3.bind(3, getDateTime());
+	query3.exec();
 }
 
 crow::json::wvalue DataStorage::GetContact(int userId)
 {
 	vector<crow::json::wvalue> contacts;
 	SQLite::Statement query(db,
-		"SELECT U.Login, C.chatId FROM Contact C "
-		"JOIN Users U ON (U.Id = C.UserId1 OR U.Id = C.UserId2) "
-		"WHERE (C.UserId1 = ? OR C.UserId2 = ?) AND U.Id != ?");
+		"SELECT U.Login, UC2.chatId "
+		"FROM UserChat UC1 "
+		"JOIN UserChat UC2 ON UC1.chatId = UC2.chatId AND UC1.UserId != UC2.UserId "
+		"JOIN Users U ON UC2.UserId = U.Id "
+		"WHERE UC1.UserId = ?");
+
 	query.bind(1, userId);
-	query.bind(2, userId);
-	query.bind(3, userId);
 	while (query.executeStep())
 	{
 		crow::json::wvalue contact;
@@ -213,19 +223,6 @@ void DataStorage::InsertAuth(string login, string password, string email, int nu
 
 	query.exec();
 
-}
-
-void DataStorage::AddContact(int u1, int u2)
-{
-	db.exec("INSERT INTO Chats (typeId) VALUES(1)");
-	int newChatId = db.getLastInsertRowid();
-
-	SQLite::Statement query(db, "INSERT INTO Contact (UserId1, UserId2, createAt, chatId) VALUES (?,?,?,?)");
-	query.bind(1, u1);
-	query.bind(2, u2);
-	query.bind(3, getDateTime());
-	query.bind(4, newChatId);
-	query.exec();
 }
 
 void DataStorage::editMessage(int  messageId, string message)

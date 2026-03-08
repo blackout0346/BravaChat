@@ -202,7 +202,7 @@ void Route::ContactsRoute()
                 }
                 int u1 = x["userId1"].i();
                 int u2 = x["userId2"].i();
-                db.AddContact(u1, u2);
+                db.InsertContact(u1, u2);
                 return crow::response(200, "Contact Added");
 
             }

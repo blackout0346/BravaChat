@@ -209,3 +209,5 @@ C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\PanelPage.baml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddItemUser.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddItemUser.baml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\RestApi.exe.config
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddGroup.g.cs
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddGroup.baml
