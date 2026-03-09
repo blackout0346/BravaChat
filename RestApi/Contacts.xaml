@@ -30,10 +30,11 @@
             </Button.Background>
         </Button>
 
-        <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged"></ListBox>
+        <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged" Width="auto"></ListBox>
         <Label x:Name="UserName" Grid.Column="1" Content="b"></Label>
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
         <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
-        <Button Grid.Row="0" Grid.Column="0" Margin="5" Width="50" Content="добавить" Click="Button_Click_1" ></Button>
+        <Button Grid.Row="0" Grid.Column="0" Margin="136,5,170,5" Content="Добавить друга" Click="AddFriend_Click" />
+        <Button Grid.Row="0" Grid.Column="0" Margin="235,5,72,5" Content="Создать группу" Click="CreateGroup_Click"/>
     </Grid>
 </Window>

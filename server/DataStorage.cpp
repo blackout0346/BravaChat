@@ -142,9 +142,12 @@ void DataStorage::InsertContact(int userId1, int userId2)
 	if (check.getColumn(0).getInt() > 0) {
 		return; 
 	}
-	db.exec("INSERT INTO Chats (typeId) VALUES (1)");
 
-
+	SQLite::Statement createChat(db, "INSERT INTO Chats(name, isGroup, createAt) VALUES(?,?,?)");
+	createChat.bind(1, "private chat");
+	createChat.bind(2, 0);
+	createChat.bind(3, getDateTime());
+	createChat.exec();
 	int newChatId = static_cast<int>(db.getLastInsertRowid());
 
 	
@@ -224,6 +227,31 @@ void DataStorage::InsertAuth(string login, string password, string email, int nu
 	query.exec();
 
 }
+
+void DataStorage::CreateGroup(string name, vector<int> UserIds)
+{
+	try{
+	SQLite::Transaction transaction(db);
+
+	SQLite::Statement query(db, "INSERT INTO Chats(name, isGroup, createAt) VALUES(?, 1, ?)");
+	query.bind(1, name);
+	query.bind(2, getDateTime());
+	query.exec();
+	int chatId = static_cast<int>(db.getLastInsertRowid());
+	for (int userId : UserIds) {
+		SQLite::Statement ins(db, "INSERT INTO UserChat (UserId, chatId, JonedAt) VALUES (?, ?, ?)");
+		ins.bind(1, userId);
+		ins.bind(2, chatId);
+		ins.bind(3, getDateTime());
+		ins.exec();
+	}
+	transaction.commit();
+	}
+	catch (exception& e) {
+		throw;
+
+	}
+};
 
 void DataStorage::editMessage(int  messageId, string message)
 {

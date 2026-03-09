@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="RestApi.ItemInGroups"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestApi"
+             mc:Ignorable="d" 
+                     d:DesignHeight="100" d:DesignWidth="400"
+            Background="White">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto">
+            </ColumnDefinition>
+            <ColumnDefinition Width="auto">
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label x:Name="UserName"  Grid.Column="0"  Content="UserName" FontSize="10" Padding="10,40"  />
+
+        <CheckBox x:Name="addedUser" Content="Добавить" Grid.Column="1" Height="20" Background="#FF3AC9ED" Margin="246,40,10,40" Checked="addedUser_Checked" Unchecked="addedUser_Unchecked"/>
+    </Grid>
+</UserControl>

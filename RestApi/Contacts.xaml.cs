@@ -45,6 +45,11 @@ namespace RestApi
             public string Login { get; set; }
         
         }
+        public class chatListResponse
+        {
+            [JsonPropertyName("chats")]
+            public List<ContactDto> Chats { get; set; }
+        }
  
 
         public Contacts(int userId)
@@ -79,16 +84,20 @@ namespace RestApi
         private async Task ViewContact()
         {
 
-            RestRequest ContactRequest = new RestRequest($"/contacts/{UserId}", Method.Get);
+            RestRequest ContactRequest = new RestRequest($"/chats/user/{this.UserId}", Method.Get);
 
-            var ContactResponse = await restClient.ExecuteAsync<List<ContactDto>>(ContactRequest);
+            var ContactResponse = await restClient.ExecuteAsync<chatListResponse>(ContactRequest);
 
-       
-            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data != null)
+            //if (!ContactResponse.IsSuccessStatusCode)
+            //{
+            //    // Это покажет, что именно ответил сервер (например, ошибку SQL)
+            //    MessageBox.Show($"Сервер вернул ошибку: {ContactResponse.Content}");
+            //}
+            if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data?.Chats != null)
             {
                 BoxContact.Items.Clear();
 
-                foreach (var contactData in ContactResponse.Data)
+                foreach (var contactData in ContactResponse.Data.Chats)
                 {
                     ItemContact itemContact = new ItemContact(contactData.chatId,contactData.Login);
                     BoxContact.Items.Add(itemContact);
@@ -100,26 +109,27 @@ namespace RestApi
                 return;
             }
         }
-        private async void GetContact()
-        {
-            try
-            {
-                var request = new RestRequest($"/contacts/{this.UserId}", Method.Get);
-                var response = await restClient.ExecuteAsync<List<ContactDto>>(request);
-                if(response.IsSuccessStatusCode && response.Data != null)
-                {
-                    BoxContact.Items.Clear();
-                    foreach(var contactData in response.Data)
-                    {
-                        ItemContact item = new ItemContact(contactData.chatId, contactData.Login);
-                        BoxContact.Items.Add(item);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-        }
+
+        //private async void GetContact()
+        //{
+        //    try
+        //    {
+        //        var request = new RestRequest($"/chats/user/{this.UserId}", Method.Get);
+        //        var response = await restClient.ExecuteAsync<List<ContactDto>>(request);
+        //        if(response.IsSuccessStatusCode && response.Data != null)
+        //        {
+        //            BoxContact.Items.Clear();
+        //            foreach(var contactData in response.Data)
+        //            {
+        //                ItemContact item = new ItemContact(contactData.chatId, contactData.Login);
+        //                BoxContact.Items.Add(item);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //    }
+        //}
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -144,11 +154,7 @@ namespace RestApi
                 UserControl1 chat = new UserControl1(this.UserId, chatId);
                 ChatDisplay.Content = chat;
             }
-            else
-            {
-                
-                MessageBox.Show("Выбранный элемент не является контактом");
-            }
+           
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -158,14 +164,24 @@ namespace RestApi
      
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void AddFriend_Click(object sender, RoutedEventArgs e)
         {
             AddUsers addUsers = new AddUsers(this.UserId);
-            addUsers.Closed += (s, args) =>
+            addUsers.Closed += async (s, args) =>
             {
-                GetContact();
+                await ViewContact();
             };
             addUsers.Show();
+        }
+
+        private void CreateGroup_Click(object sender, RoutedEventArgs e)
+        {
+
+            AddGroups addGroups = new AddGroups(this.UserId);
+            addGroups.Closed += async (s, args) => {
+                await ViewContact();
+            };
+            addGroups.Show();
         }
     }
 }

@@ -311,123 +311,80 @@ void Route::ChatRoute()
 {
     CROW_ROUTE(app, "/chats").methods("POST"_method)([&](const crow::request req)
         {
+            bool transactionStarted = false;
             try {
                 crow::json::rvalue x = crow::json::load(req.body);
+                cout<<"chats rew:" << x << endl;
                 if (!x || !x.has("name") || !x.has("UserIds"))
                 {
                     return crow::response(400, "missing required fields");
                 }
-
-                bool isGroup = x["UserIds"].size() > 2;
-                if (!isGroup)
+                string groupName = x["name"].s();
+                vector<int> userIds;
+                for (auto& id : x["UserIds"]) 
                 {
-                    vector<int> UserIds;
-                    for (const auto& userId : x["UserIds"])
-                    {
-                        UserIds.push_back(userId.i());
-                    }
-                    SQLite::Statement checkQuery(db.db, "SELECT C.Id FROM Chats"
-                        "INNER JOIN UserChat AS UC1 ON C.Id = UC1.chatId"
-                        "INNER JOIN UserChat AS UC2 ON C.Id = UC2.chatId"
-                        "WHERE C.isGroup = 0"
-                        "AND UC1.UserId = ?"
-                        "AND UC2.UserId = ?"
-                        "AND(SELECT COUNT(*) FROM UserChat WHERE chatId = C.Id) =2");
-                    checkQuery.bind(1, UserIds[0]);
-                    checkQuery.bind(2, UserIds[1]);
-
-                    if (checkQuery.executeStep())
-                    {
-                        crow::json::wvalue response;
-                        response["error"] = "Private chat with this user already exists";
-                        response["existingChatId"] = checkQuery.getColumn(0).getInt();
-                        return crow::response(409, response);
-                    }
+                    userIds.push_back(id.i());
                 }
-                db.db.exec("BEGIN TRANSACTION");
-                SQLite::Statement chatQuery(db.db, "INSERT INTO Chats(name, isGroup,createAt)VALUES(?,?,?)");
-                chatQuery.bind(1, x["name"].s());
-                chatQuery.bind(2, isGroup ? 1 : 0);
-                chatQuery.bind(3, db.getDateTime());
-                chatQuery.exec();
-
-                int chatId = static_cast<int>(db.db.getLastInsertRowid());
-                SQLite::Statement userChatQuery(db.db, "INSERT INTO UserChat(UserId,ChatId, JonedAt) VALUES(?,?,?)");
-                for (const auto& userId : x["UserIds"])
-                {
-                    userChatQuery.reset();
-                    userChatQuery.bind(1, userId.i());
-                    userChatQuery.bind(2, chatId);
-                    userChatQuery.bind(3, db.getDateTime());
-                    userChatQuery.exec();
-
-                }
-                db.db.exec("COMMIT");
+                db.CreateGroup(groupName, userIds);
                 crow::json::wvalue response;
-                response["Id"] = chatId;
-                response["message"] = "Chat created";
+                response["message"] = "Group created successfully";
                 return crow::response(201, response);
 
-            }
-            catch (const std::exception& e) {
-                db.db.exec("ROLLBACK");
+            }catch(const exception& e)
+            {
+         
                 return crow::response(400, e.what());
             }
         });
     CROW_ROUTE(app, "/chats/user/<int>")([&](int userId) {
         try {
             SQLite::Statement query(db.db,
-                "SELECT C.name, C.isGroup, C.createAt, M.Message as LastMessage, M.SendDate AS LastMessageTime FROM Chats AS C"
-                "INNER JOIN UserChat as UC ON UC.chatId = C.Id"
-                "LEFT JOIN Message M ON M.Id = ( SELECT Id FROM Message WHERE chatId = C.Id ORDER BY SendDate DESC LIMIT 1)"
-                "LEFT JOIN User U ON U.Id = M.UserId"
-                "WHERE UC.UserId = ? "
-                "ORDER BY COALESCE(M.SendDate, C.createAt) DESC");
+                "SELECT C.Id, C.name, C.isGroup FROM Chats AS C "
+                "INNER JOIN UserChat as UC ON UC.chatId = C.Id "
+                "WHERE UC.UserId = ?");
             query.bind(1, userId);
-            crow::json::wvalue::list chats;
+
+            crow::json::wvalue::list chats_list;
+
             while (query.executeStep())
             {
                 crow::json::wvalue chat;
                 int chatId = query.getColumn(0).getInt();
+                string chatName = query.getColumn(1).getText();
                 bool IsGroup = query.getColumn(2).getInt() == 1;
-                chat["Id"] = chatId;
+
+                chat["chatId"] = chatId; 
                 chat["IsGroup"] = IsGroup;
-                chat["CreatedAt"] = query.getColumn(3).getText();
-                if (IsGroup)
-                {
-                    chat["name"] = query.getColumn(1).getText();
+
+                if (IsGroup) {
+                    chat["login"] = chatName; 
                 }
                 else {
+                  
                     SQLite::Statement otherUserQuery(db.db,
-                        "SELECT U.Name FROM Users AS U"
-                        "INNER JOIN UserChat AS UC ON UC.UserId = U.Id"
-                        "WHERE UC.chatId = ? AND U.Id != ?");
+                        "SELECT Login FROM Users "
+                        "WHERE Id = (SELECT UserId FROM UserChat WHERE chatId = ? AND UserId != ? LIMIT 1)");
                     otherUserQuery.bind(1, chatId);
                     otherUserQuery.bind(2, userId);
-                    if (otherUserQuery.executeStep())
-                    {
-                        chat["name"] = otherUserQuery.getColumn(0).getText();
+
+                    if (otherUserQuery.executeStep()) {
+                        chat["login"] = otherUserQuery.getColumn(0).getText();
                     }
                     else {
-                        chat["name"] = query.getColumn(1).getText();
+                        chat["login"] = "Unknown User";
                     }
-
-                    if (!query.getColumn(4).isNull())
-                    {
-                        chat["lastMessage"] = query.getColumn(4).getText();
-                        chat["lastMessageTime"] = query.getColumn(5).getText();
-                        chat["lastMessageUser"] = query.getColumn(6).getText();
-                    }
-                    chats.push_back(move(chat));
-
                 }
-                crow::json::wvalue response;
-                response["chats"] = move(chats);
-                return crow::response(200, response);
-
+               
+                chats_list.push_back(std::move(chat));
             }
+
+           
+            crow::json::wvalue response;
+            response["chats"] = std::move(chats_list);
+            return crow::response(200, response);
         }
-        catch (exception& e) {
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
             return crow::response(400, e.what());
         }
         });

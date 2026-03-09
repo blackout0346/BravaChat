@@ -6,7 +6,7 @@ int main()
 {
 	DataStorage db;
 	Route route;
-	db.createDatabase();
+	//db.createDatabase();
 
 	route.UsersRoute();
 	route.ChatRoute();

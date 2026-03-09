@@ -5,23 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RestApi"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="200"
+             d:DesignHeight="100" d:DesignWidth="600"
              Background="White">
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition>
+            <ColumnDefinition Width="auto">
             </ColumnDefinition>
-            <ColumnDefinition>
+            <ColumnDefinition Width="auto">
             </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25*">
-            </RowDefinition>
-            <RowDefinition Height="14*">
-            </RowDefinition>
-            <RowDefinition Height="11*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label x:Name="UserName" Grid.Row="0" Grid.Column="0" Content="UserName" Grid.ColumnSpan="2" Margin="63,25,63,0"/>
+        <Label x:Name="UserName" Grid.Row="0" Grid.Column="0" Content="UserName" Width="auto" Grid.ColumnSpan="2" Margin="63,24,63,1"/>
     </Grid>
 </UserControl>

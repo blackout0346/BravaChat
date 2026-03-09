@@ -60,6 +60,7 @@ namespace RestApi
                     ListUsers.Items.Clear();
                     foreach (var item in response.Data)
                     {
+                        if (item.Id == MyId) continue;
                         AddItemUser addItemUser = new AddItemUser(item.Id, item.login);
                         addItemUser.OnaddUserClicked += async (PartnerId) =>
                         {
