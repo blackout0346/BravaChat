@@ -233,8 +233,7 @@ void Route::UsersRoute()
             string Password = x["passwords"].s();
             string email = x["emails"].s();
 
-
-            int NumberPhone = x["numbers"].i();
+            string NumberPhone = x["numbers"].s();
 
 
             string photo = "";

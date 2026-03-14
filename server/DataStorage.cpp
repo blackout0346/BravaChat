@@ -212,7 +212,7 @@ crow::json::wvalue DataStorage::SelectLogin(string login, string password, int n
 	return response;
 }
 
-void DataStorage::InsertAuth(string login, string password, string email, int number, string photo )
+void DataStorage::InsertAuth(string login, string password, string email, string number, string photo )
 {
 	SQLite::Statement query(db, "INSERT INTO Users(Login, NumberPhone, Email, Password, PicturePath) VALUES(?,?,?,?,?)");
 	query.bind(1, login);

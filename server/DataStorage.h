@@ -23,7 +23,7 @@ public:
 	void InsertContact(int userId1, int userId2);
 	crow::json::wvalue GetContact(int userId);
 	crow::json::wvalue SelectLogin(string login, string password, int number);
-	void InsertAuth(string login, string password, string email, int number, string photo);
+	void InsertAuth(string login, string password, string email, string number, string photo);
 	void CreateGroup(string name, vector<int>UserIds);
 	void editMessage(int  messageId, string message);
 	string getDateTime();
