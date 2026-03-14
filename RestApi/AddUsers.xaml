@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="Добавить друга" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF0AE3FF"></Label>
+        <Label Content="Добавить друга" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF6CBEE8"></Label>
         <TextBox x:Name="search" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,74,100,46" />
         <TextBlock Text="Введите друга..." IsHitTestVisible="False" Foreground="Gray" Margin="20,74,83,46"  >
             <TextBlock.Style >
@@ -30,7 +30,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button Grid.Column="0" Grid.Row="2" Height="auto" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Выйти"  Background="#FF0AE3FF" Click="Button_Click"></Button>
+        <Button Grid.Column="0" Grid.Row="2" Height="auto" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Выйти"  Background="#FF6CBEE8" Click="Button_Click"></Button>
         <ListBox x:Name="ListUsers" Grid.Row="1" Grid.ColumnSpan="2" Height="auto" Width="auto"></ListBox>
     </Grid>
 </Window>

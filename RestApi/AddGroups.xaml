@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="Создать группу" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF0AE3FF"></Label>
+        <Label Content="Создать группу" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF6CBEE8"></Label>
         <TextBox x:Name="NameGroup" Grid.Row="0" Grid.ColumnSpan="2" Margin="60,75,60,45" />
         <TextBlock Text="Придумайте название группы..." IsHitTestVisible="False" Foreground="Gray" Margin="60,77,133,45" Grid.ColumnSpan="2"   >
             <TextBlock.Style >
@@ -44,8 +44,8 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button Grid.Column="0" Grid.Row="2" Height="auto"  Margin="0,98,0,0" Content="Выйти"  Background="#FF0AE3FF" Click="Button_Click" ></Button>
-        <Button x:Name="accept" Grid.Column="1" Grid.Row="2" Height="auto" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Принять"  Background="#FF0AE3FF" Click="accept_Click"></Button>
+        <Button Grid.Column="0" Grid.Row="2" Height="auto"  Margin="0,98,0,0" Content="Выйти"  Background="#FF6CBEE8" Click="Button_Click" ></Button>
+        <Button x:Name="accept" Grid.Column="1" Grid.Row="2" Height="auto" Grid.ColumnSpan="2" Margin="0,98,0,0" Content="Принять"  Background="#FF6CBEE8" Click="accept_Click"></Button>
         <ListBox x:Name="ListUsers" Grid.Row="1" Grid.ColumnSpan="2" Height="auto" Width="auto"></ListBox>
     </Grid>
 </Window>
