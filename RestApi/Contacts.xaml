@@ -3,12 +3,56 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:RestApi"
         mc:Ignorable="d"
         Title="Contacts" Height="600" Width="1300"
         MinHeight="600" MinWidth="1300">
+    <materialDesign:DrawerHost x:Name="MainDrawer">
+     
+    <materialDesign:DrawerHost.LeftDrawerContent>
+
+            <Grid  Width="300" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" >
+                    </ColumnDefinition>
+                    <ColumnDefinition >
+                    </ColumnDefinition>
+                    <ColumnDefinition >
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+                    </RowDefinition >
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    
+                </Grid.RowDefinitions>
+                <Rectangle  Grid.ColumnSpan="3" Width="auto" Height="50" Fill="#FF6CBEE8" ></Rectangle>
+                <Button x:Name="ClosePanel" Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                              Style="{StaticResource MaterialDesignFlatButton}"
+                       Grid.Column="0" Grid.Row="0"  Width="auto" >
+                    
+                    
+                    <Image Source="/ButtonPanel.png" ></Image>
+                 
+                </Button>
+                <Label x:Name="UserName" Content="UserName" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" Foreground="White" Background="#FF6CBEE8" Width="auto" Padding="10"  ></Label>
+
+
+                <Button Content="Добавить друга" BorderBrush="#FF6CBEE8" Style="{StaticResource MaterialDesignRaisedLightButton}" Click="AddFriend_Click" Background="#FF6CBEE8"  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" Foreground="White"  Margin="10"></Button>
+                <Button Content="Создать группу" BorderBrush="#FF6CBEE8" Style="{StaticResource MaterialDesignRaisedLightButton}" Click="CreateGroup_Click" Background="#FF6CBEE8" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Foreground="White" Margin="10"></Button>
+                <Button Content="Выйти"         BorderBrush="#FF6CBEE8" Style="{StaticResource MaterialDesignRaisedLightButton}" Click="Exit_Click" Background="#FF6CBEE8" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" Foreground="White"  Margin="10" ></Button>
+            </Grid>
+        </materialDesign:DrawerHost.LeftDrawerContent>
         
-    <Grid>
+<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400">
             </ColumnDefinition>
@@ -19,22 +63,18 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-
-
-
-
         <Rectangle  Grid.ColumnSpan="2" Width="auto" Height="50" Fill="#FF6CBEE8" ></Rectangle>
-        <Button x:Name="buttonPanel" Grid.Column="0" Width="60" Height="40" Margin="0,0,350,0" Click="Button_Click" >
+            <Button x:Name="buttonPanel" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"  CommandParameter ="{x:Static Dock.Left}" Grid.Column="0" Width="50" Height="40" Margin="0,0,350,0" >
             <Button.Background>
                 <ImageBrush ImageSource="/ButtonPanel.png"/>
             </Button.Background>
         </Button>
-
+      
         <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged" Width="auto"></ListBox>
-        <Label x:Name="UserName" Grid.Column="1" Content="b"></Label>
+     
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
-        <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
-        <Button Grid.Row="0" Grid.Column="0" Margin="136,5,170,5" Content="Добавить друга" Click="AddFriend_Click" />
-        <Button Grid.Row="0" Grid.Column="0" Margin="235,5,72,5" Content="Создать группу" Click="CreateGroup_Click"/>
-    </Grid>
+            <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
+
+        </Grid>
+    </materialDesign:DrawerHost>
 </Window>

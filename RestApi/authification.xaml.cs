@@ -45,7 +45,7 @@ namespace RestApi
             public string passwords { get; set; }
 
             [JsonPropertyName("numbers")]
-            public int numbers { get; set; }
+            public string numbers { get; set; }
 
             [JsonPropertyName("photo")]
             public string photo { get; set; }
@@ -70,9 +70,6 @@ namespace RestApi
             passwords = inputPassword.Text.Trim();
             numbers = inputNumber.Text.Trim();
        
-            if(!int.TryParse(numbers, out int input))
-            {
-
           
             if (numbers.Length < 11)
             {
@@ -81,7 +78,7 @@ namespace RestApi
             }
             if (!string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(emails) && !string.IsNullOrEmpty(passwords))
             {
-                AuthResponse(Login, emails, passwords, input);
+                AuthResponse(Login, emails, passwords, numbers);
                 inputName.Text = " ";
                 inputPassword.Text = " ";
                 inputEmail.Text = " ";
@@ -99,10 +96,10 @@ namespace RestApi
                 return;
             }
 
-            }
+            
         }
 
-        private async void AuthResponse(string name, string email, string password, int number)
+        private async void AuthResponse(string name, string email, string password, string number)
         {
 
             var NewAuthUser = new AuthificationData

@@ -17,6 +17,6 @@
         </Grid.ColumnDefinitions>
 
         <Label x:Name="UserName"  Grid.Column="0"  Content="UserName" FontSize="10" Padding="10,40"  />
-        <Button x:Name="addedUser" Content="Добавить" Grid.Column="1" Width="60" Height="20" Background="#FF3AC9ED" Margin="264,40,10,40" Click="addedUser_Click" ></Button>
+        <Button x:Name="addedUser" Content="Добавить" Grid.Column="1" Width="60" Height="20" Background="#80C8ED" Margin="264,40,10,40" Click="addedUser_Click" ></Button>
     </Grid>
 </UserControl>

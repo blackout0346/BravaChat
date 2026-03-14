@@ -213,3 +213,10 @@ C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddGroups.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemInGroups.g.cs
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\AddGroups.baml
 C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\ItemInGroups.baml
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\MaterialDesignColors.dll
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\MaterialDesignThemes.Wpf.dll
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\Microsoft.Xaml.Behaviors.dll
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\MaterialDesignThemes.Wpf.xml
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\Microsoft.Xaml.Behaviors.pdb
+C:\Users\smira\source\repos\serverCPP\RestApi\bin\Debug\Microsoft.Xaml.Behaviors.xml
+C:\Users\smira\source\repos\serverCPP\RestApi\obj\Debug\App.baml

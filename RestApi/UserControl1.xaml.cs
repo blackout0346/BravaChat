@@ -147,8 +147,11 @@ namespace RestApi
 
         private void sendMessage_Click(object sender, RoutedEventArgs e)
         {
-
-            SetMessage();
+            if(!string.IsNullOrEmpty(InputMsg.Text))
+            {
+                SetMessage();
+            }
+          
         }
     }
 }
