@@ -8,13 +8,13 @@ void DataStorage::createDatabase()
 
 	try {
 		db.exec("CREATE TABLE Chats (Id	INTEGER,typeId	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(typeId) REFERENCES TypeChat(Id)); ");
-		db.exec("CREATE TABLE Users (Id	INTEGER NOT NULL,Login	TEXT NOT NULL,NumberPhone	INTEGER NOT NULL,Email	TEXT NOT NULL,Password	TEXT NOT NULL,PicturePath	BLOB,PRIMARY KEY(Id AUTOINCREMENT)); ");
+		db.exec("CREATE TABLE Users (Id	INTEGER NOT NULL,Login	TEXT NOT NULL,NumberPhone	INTEGER NOT NULL,Email	TEXT NOT NULL,Password	TEXT NOT NULL,PicturePath TEXT,PRIMARY KEY(Id AUTOINCREMENT)) ");
 		db.exec("CREATE TABLE Roles(Id	INTEGER NOT NULL,Name	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT)); ");	
 		db.exec("CREATE TABLE Contact (Id	INTEGER NOT NULL,UserId1	INTEGER NOT NULL,UserId2	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(UserId1) REFERENCES Users(Id),FOREIGN KEY(UserId2) REFERENCES Users(Id)); ");
 		db.exec("CREATE TABLE TypeChat (Id	INTEGER,typeName	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT)); ");
 		db.exec("CREATE TABLE GroupChat (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,typeId	INTEGER NOT NULL,NameChat	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(typeId) REFERENCES Roles(Id)); ");
-		db.exec("CREATE TABLE Message (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,SendDate	DATETIME DEFAULT CURRENT_TIMESTAMP,chatId	INTEGER NOT NULL,Message	TEXT NOT NULL,ReplyId	INTEGER,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(ReplyId) REFERENCES Message(Id),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id)); ");
-		db.exec("CREATE TABLE UserChat (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,chatId	INTEGER NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id)); ");
+		db.exec("CREATE TABLE Message (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,chatId	INTEGER NOT NULL,SendDate	TEXT NOT NULL,Message	TEXT NOT NULL,ReplyId	INTEGER,ForwardId	INTEGER,EditedAt	TEXT,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(ForwardId) REFERENCES Message(Id),FOREIGN KEY(ReplyId) REFERENCES Message(Id),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id))");
+		db.exec("CREATE TABLE UserChat (Id	INTEGER NOT NULL,UserId	INTEGER NOT NULL,chatId	INTEGER NOT NULL,JonedAt	TEXT NOT NULL,PRIMARY KEY(Id AUTOINCREMENT),FOREIGN KEY(UserId) REFERENCES Users(Id),FOREIGN KEY(chatId) REFERENCES Chats(Id))");
 		cout << "sqlite create database "<< endl;
 	}
 	catch (exception& e)
@@ -85,7 +85,7 @@ void DataStorage::InsertMessage(int userId, int chatId, string Message, int repl
 	}
 }
 
-crow::json::wvalue DataStorage::GetMessages(crow::json::wvalue msg , int chatId)
+crow::json::wvalue DataStorage::SetMessages(crow::json::wvalue msg , int chatId)
 {
 	std::vector<crow::json::wvalue> rows;
 	SQLite::Statement query(db, "SELECT M.Id, M.UserId, U.Login, M.chatId, M.SendDate, M.Message, M.ReplyId, M.ForwardId, M.EditedAt FROM Message AS M INNER JOIN Users AS U ON U.Id = M.UserId WHERE m.chatId = ? ORDER BY SendDate ASC");
@@ -193,7 +193,7 @@ crow::json::wvalue DataStorage::GetContact(int userId)
 
 
 
-crow::json::wvalue DataStorage::SelectLogin(string login, string password, int number)
+crow::json::wvalue DataStorage::SelectLogin(string login, string password, string number)
 {
 	crow::json::wvalue response;
 	SQLite::Statement query(db, "SELECT Id, Login, Password FROM Users WHERE Login = ? AND Password = ?");
@@ -212,9 +212,24 @@ crow::json::wvalue DataStorage::SelectLogin(string login, string password, int n
 	return response;
 }
 
-void DataStorage::InsertAuth(string login, string password, string email, string number, string photo )
+void DataStorage::DeleteMessage(int messageId)
 {
-	SQLite::Statement query(db, "INSERT INTO Users(Login, NumberPhone, Email, Password, PicturePath) VALUES(?,?,?,?,?)");
+	db.exec("BEGIN TRANSACTION");
+	SQLite::Statement updateRepliesQuery(db,
+		"UPDATE Message SET ReplyId = NULL WHERE replyId =?");
+	updateRepliesQuery.bind(1, messageId);
+	updateRepliesQuery.exec();
+
+	SQLite::Statement deleteQuery(db,
+		"DELETE FROM Message WHERE Id = ?");
+	deleteQuery.bind(1, messageId);
+	deleteQuery.exec();
+	db.exec("COMMIT");
+}
+
+void DataStorage::InsertAuth(string login, string password, string email, string number, string photo, string token)
+{
+	SQLite::Statement query(db, "INSERT INTO Users(Login, NumberPhone, Email, Password, PicturePath, Token) VALUES(?,?,?,?,?,?)");
 	query.bind(1, login);
 	query.bind(2, number);
 	query.bind(3, email);
@@ -223,7 +238,7 @@ void DataStorage::InsertAuth(string login, string password, string email, string
 	{
 		query.bind(5, photo);
 	}
-
+	query.bind(6, token);
 	query.exec();
 
 }
@@ -268,7 +283,7 @@ string DataStorage::getDateTime()
 	auto date = chrono::system_clock::now();
 	auto time = chrono::system_clock::to_time_t(date);
 	stringstream ss;
-	ss << put_time(localtime(&time), "%Y-%m-%d %H:%M:%S");
+	ss << put_time(localtime(&time), "%H:%M");
 	return ss.str();
 }
 
@@ -302,5 +317,83 @@ crow::json::wvalue DataStorage::SearchLogin( string search)
 		users.push_back(move(userrow));
 	}
 	return crow::json::wvalue(move(users));
+}
+
+crow::json::wvalue DataStorage::GetMessages(int messageId)
+{
+	SQLite::Statement query(db,
+		"SELECT M.Id, M.UserId, M.chatId, M.SendDate, U.Login, M.Message FROM Message AS M "
+		"INNER JOIN Users AS U ON M.UserId = U.Id WHERE M.Id = ?");
+	query.bind(1, messageId);
+
+	if (query.executeStep())
+	{
+		crow::json::wvalue msg;
+		msg["Id"] = query.getColumn(0).getInt();
+		msg["chatId"] = query.getColumn(1).getInt();
+		msg["UserId"] = query.getColumn(2).getInt();
+		msg["sendDate"] = query.getColumn(3).getText();
+		msg["UserName"] = query.getColumn(4).getText();
+		msg["Message"] = query.getColumn(5).getText();
+
+		return msg;
+
+	}
+}
+
+crow::json::wvalue DataStorage::GetChatUser(int UserId)
+{
+	SQLite::Statement query(db,
+		"SELECT C.Id, C.name, C.isGroup FROM Chats AS C "
+		"INNER JOIN UserChat as UC ON UC.chatId = C.Id "
+		"WHERE UC.UserId = ?");
+	query.bind(1, UserId);
+
+	crow::json::wvalue::list chats_list;
+
+	while (query.executeStep())
+	{
+		crow::json::wvalue chat;
+		int chatId = query.getColumn(0).getInt();
+		string chatName = query.getColumn(1).getText();
+		bool IsGroup = query.getColumn(2).getInt() == 1;
+
+		chat["chatId"] = chatId;
+		chat["IsGroup"] = IsGroup;
+
+		if (IsGroup) {
+			chat["login"] = chatName;
+		}
+		else {
+
+			SQLite::Statement otherUserQuery(db,
+				"SELECT Login FROM Users "
+				"WHERE Id = (SELECT UserId FROM UserChat WHERE chatId = ? AND UserId != ? LIMIT 1)");
+			otherUserQuery.bind(1, chatId);
+			otherUserQuery.bind(2, UserId);
+
+			if (otherUserQuery.executeStep()) {
+				chat["login"] = otherUserQuery.getColumn(0).getText();
+			}
+			else {
+				chat["login"] = "Unknown User";
+			}
+		}
+
+		chats_list.push_back(std::move(chat));
+	}
+
+
+	crow::json::wvalue response;
+	response["chats"] = std::move(chats_list);
+	return response;
+}
+
+void DataStorage::UpdateUserToken(int userId, string token)
+{
+	SQLite::Statement query(db, "UPDATE Users SET Token = ? WHERE Id = ?");
+	query.bind(1, token);
+	query.bind(2, userId);
+	query.exec();
 }
 

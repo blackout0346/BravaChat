@@ -40,7 +40,7 @@ void Route::MessageRoute()
         {
             try {
 
-                auto result = db.GetMessages(crow::json::wvalue(), chatId);
+                auto result = db.SetMessages(crow::json::wvalue(), chatId);
 
                 return crow::response(200, result);
 
@@ -55,18 +55,12 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/message/<int>/delete").methods("DELETE"_method)([&](int messageId)
         {
             try {
-                db.db.exec("BEGIN TRANSACTION");
-                SQLite::Statement updateRepliesQuery(db.db,
-                    "UPDATE Message SET ReplyId = NULL WHERE replyId =?");
-                updateRepliesQuery.bind(1, messageId);
-                updateRepliesQuery.exec();
 
-                SQLite::Statement deleteQuery(db.db,
-                    "DELETE FROM Message WHERE Id = ?");
-                deleteQuery.bind(1, messageId);
-                deleteQuery.exec();
-                db.db.exec("COMMIT");
-                return crow::response(200, "Message deleted");
+
+                db.DeleteMessage(messageId);
+                crow::json::wvalue res;
+                res["status"] = "Message Deleted";
+                return crow::response(200, res);
 
             }
             catch (exception& e)
@@ -79,25 +73,10 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/message/<int>")([&](int messageId)
         {
             try {
-                SQLite::Statement query(db.db,
-                    "SELECT M.Id, M.UserId, M.chatId, M.SendDate, U.Login, M.Message FROM Message AS M "
-                    "INNER JOIN Users AS U ON M.UserId = U.Id WHERE M.Id = ?");
-                query.bind(1, messageId);
 
-                if (query.executeStep())
-                {
-                    crow::json::wvalue msg;
-                    msg["Id"] = query.getColumn(0).getInt();
-                    msg["chatId"] = query.getColumn(1).getInt();
-                    msg["UserId"] = query.getColumn(2).getInt();
-                    msg["sendDate"] = query.getColumn(3).getText();
-                    msg["UserName"] = query.getColumn(4).getText();
-                    msg["Message"] = query.getColumn(5).getText();
+                auto result = db.GetMessages(messageId);
 
-                    return crow::response(200, msg);
-
-                }
-                return crow::response(404, "Message not found");
+                return crow::response(200, result);
 
 
             }
@@ -111,15 +90,17 @@ void Route::MessageRoute()
     CROW_ROUTE(app, "/message/<int>/edit").methods("PUT"_method)([&](const crow::request& req, int messageId)
         {
             auto body = crow::json::load(req.body);
-            if (!!body || !body.has("message"))
+            cout <<"Raw JSON" << body << endl;
+            if (!body.has("message"))
             {
                 return crow::response(400, "Missing message text");
             }
             try
             {
                 db.editMessage(messageId, body["message"].s());
-           
-                return crow::response(200, "Message edited");
+                crow::json::wvalue res;
+                res["status"] = "edited";
+                return crow::response(200, res);
 
             }
             catch (exception& e)
@@ -147,7 +128,9 @@ void Route::ContactsRoute()
                     return crow::response(400, "cannot add yourself as contact! ");
                 }
                 db.InsertContact(user1, user2);
-                return crow::response(201, "contact added");
+                crow::json::wvalue res;
+                res["status"] = "added";
+                return crow::response(201, res);
             }
             catch (exception& e)
             {
@@ -179,7 +162,9 @@ void Route::ContactsRoute()
                     swap(userId1, userId2);
                 }
                 db.DeleteContact(userId1, userId2);
-                return crow::response(200, "Contact Deleted");
+                crow::json::wvalue res;
+                res["status"] = "Contact Deleted";
+                return crow::response(200, res);
 
             }
             catch (exception& e)
@@ -224,27 +209,29 @@ void Route::UsersRoute()
         if (!x) return crow::response(400, "Invalid JSON format");
 
         try {
-
-            if (!x.has("Login") || !x.has("passwords") || !x.has("emails") || !x.has("numbers")) {
+       
+            if (!x.has("Login") || !x.has("passwords") || !x.has("emails") || !x.has("numbers"))
+    {
                 return crow::response(400, "Missing required fields: Login, passwords, emails or numbers");
             }
 
             string login = x["Login"].s();
             string Password = x["passwords"].s();
             string email = x["emails"].s();
-
             string NumberPhone = x["numbers"].s();
-
-
             string photo = "";
             if (x.has("photo")) {
                 photo = x["photo"].s();
             }
-            db.InsertAuth(login, Password, email, NumberPhone, photo);
+        
+            string token = GT.generateToken();
+            db.InsertAuth(login, Password, email, NumberPhone, photo, token);
             int userId = static_cast<int>(db.db.getLastInsertRowid());
+            
             crow::json::wvalue response;
             response["Id"] = userId;
-            response["message"] = "User registered successfully";
+            response["Token"] = token;
+          
             return crow::response(201, response);
 
 
@@ -259,16 +246,22 @@ void Route::UsersRoute()
         try
         {
             crow::json::rvalue x = crow::json::load(req.body);
-
+            string token = GT.generateToken();
             string login = x["Login"].s();
             string Password = x["Password"].s();
-            int NumberPhone = x["NumberPhone"].i();
-
+      
+            string NumberPhone = x["NumberPhone"].s();
             auto result = db.SelectLogin(login, Password, NumberPhone);
-
-            if (result.keys().empty()) {
+            if (result.keys().empty())
+            {
                 return crow::response(401, "Invalid credentials");
             }
+     
+            int userId = stoi(result["Id"].dump());
+
+         
+            db.UpdateUserToken(userId, token);
+            result["Token"] = token;
             return crow::response(200, result);
 
         }
@@ -337,50 +330,9 @@ void Route::ChatRoute()
         });
     CROW_ROUTE(app, "/chats/user/<int>")([&](int userId) {
         try {
-            SQLite::Statement query(db.db,
-                "SELECT C.Id, C.name, C.isGroup FROM Chats AS C "
-                "INNER JOIN UserChat as UC ON UC.chatId = C.Id "
-                "WHERE UC.UserId = ?");
-            query.bind(1, userId);
+            auto result= db.GetChatUser(userId);
 
-            crow::json::wvalue::list chats_list;
-
-            while (query.executeStep())
-            {
-                crow::json::wvalue chat;
-                int chatId = query.getColumn(0).getInt();
-                string chatName = query.getColumn(1).getText();
-                bool IsGroup = query.getColumn(2).getInt() == 1;
-
-                chat["chatId"] = chatId; 
-                chat["IsGroup"] = IsGroup;
-
-                if (IsGroup) {
-                    chat["login"] = chatName; 
-                }
-                else {
-                  
-                    SQLite::Statement otherUserQuery(db.db,
-                        "SELECT Login FROM Users "
-                        "WHERE Id = (SELECT UserId FROM UserChat WHERE chatId = ? AND UserId != ? LIMIT 1)");
-                    otherUserQuery.bind(1, chatId);
-                    otherUserQuery.bind(2, userId);
-
-                    if (otherUserQuery.executeStep()) {
-                        chat["login"] = otherUserQuery.getColumn(0).getText();
-                    }
-                    else {
-                        chat["login"] = "Unknown User";
-                    }
-                }
-               
-                chats_list.push_back(std::move(chat));
-            }
-
-           
-            crow::json::wvalue response;
-            response["chats"] = std::move(chats_list);
-            return crow::response(200, response);
+            return crow::response(200, result);
         }
         catch (std::exception& e) {
             std::cerr << "Error: " << e.what() << std::endl;

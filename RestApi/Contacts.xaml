@@ -71,7 +71,7 @@
         </Button>
       
         <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged" Width="auto"></ListBox>
-     
+         
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
             <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>
 

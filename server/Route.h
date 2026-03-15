@@ -4,6 +4,7 @@
 #include <iostream>
 #include "DataStorage.h"
 #include <chrono>
+#include "GeneratorToken.h"
 using namespace std;
 class Route
 {
@@ -14,6 +15,7 @@ private:
 
 public:
 	DataStorage db;
+	GeneratorToken GT;
 	void MessageRoute();
 	void ContactsRoute();
 	void UsersRoute();

@@ -21,6 +21,8 @@ namespace RestApi
         
         public class UserResponse
         {
+            [JsonPropertyName("Token")]
+            public string Token { get; set; }
             [JsonPropertyName("Id")]
             public int Id { get; set; }
 
@@ -39,25 +41,24 @@ namespace RestApi
         public MainWindow()
         {
             InitializeComponent();
-
+         
         }
 
-   
         private void setinput()
         {
             inputsName = inputName.Text.Trim();
-            inputsPassword = inputPassword.Text.Trim();
-            if (!string.IsNullOrEmpty(inputsName) && !string.IsNullOrEmpty(inputsPassword))
+            inputsPassword = inputPassword.Password.Trim();
+            if (!string.IsNullOrWhiteSpace(inputsName) && !string.IsNullOrWhiteSpace(inputsPassword))
             {
                 SETLOGIN(inputsName, inputsPassword);
-                inputName.Text = " ";
-                inputPassword.Text = " ";
+                inputsName = " ";
+                inputsPassword = " ";
             }
             else
             {
-                MessageBox.Show($" {inputsName},{inputsPassword}Введите логин и пароль");
-                inputName.Text = " ";
-                inputPassword.Text = " ";
+                MessageBox.Show("Введите логин и пароль");
+                inputsName = " ";
+                inputsPassword = " ";
                 return;
             }
 
@@ -80,6 +81,10 @@ namespace RestApi
                 {
                 try {
                     var userData = JsonSerializer.Deserialize<UserResponse>(response.Content);
+
+                    Properties.Settings.Default.SavedUserId = userData.Id;
+                    Properties.Settings.Default.SavedToken = userData.Token;
+                    Properties.Settings.Default.Save();
                     Contacts contacts = new Contacts(userData.Id);
                     contacts.Show();
                     this.Close();

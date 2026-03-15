@@ -9,7 +9,7 @@
         MinWidth="400"
         MaxHeight="500"
         MaxWidth="500"
-        Title="MainWindow" Height="450" Width="400">
+        Title="Login" Height="450" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -27,7 +27,7 @@
         </Hyperlink>  
         </TextBlock>
         <TextBox x:Name="inputName" Grid.Column="0" Grid.Row="1" Margin="10,30,10,30"/>
-        <TextBox x:Name="inputPassword" Grid.Column="0" Grid.Row="2" Margin="10,30,10,30"/>
+        <PasswordBox x:Name="inputPassword" Grid.Column="0" Grid.Row="2" Margin="10,30,10,30"/>
         <Button x:Name="click" Grid.Row="3" Click="click_Click" Content="Войти" Background="#80C8ED" Height="auto" />
        
     </Grid>

@@ -88,33 +88,32 @@ namespace RestApi
 
             var ContactResponse = await restClient.ExecuteAsync<chatListResponse>(ContactRequest);
 
-            //if (!ContactResponse.IsSuccessStatusCode)
-            //{
-            //    // Это покажет, что именно ответил сервер (например, ошибку SQL)
-            //    MessageBox.Show($"Сервер вернул ошибку: {ContactResponse.Content}");
-            //}
             if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data?.Chats != null)
-            {
-                BoxContact.Items.Clear();
+            { 
+                    BoxContact.Items.Clear();
 
-                foreach (var contactData in ContactResponse.Data.Chats)
-                {
-                    ItemContact itemContact = new ItemContact(contactData.chatId,contactData.Login);
-                    BoxContact.Items.Add(itemContact);
-                }
+                    foreach (var contactData in ContactResponse.Data.Chats)
+                    {
+                        ItemContact itemContact = new ItemContact(contactData.chatId, contactData.Login);
+                        BoxContact.Items.Add(itemContact);
+                    }
+               
             }
             else
             {
                 MessageBox.Show("Не удалось загрузить контакты. Код: " + ContactResponse.StatusCode);
                 return;
             }
+
+
+           
         }
 
         //private async void GetContact()
         //{
         //    try
         //    {
-        //        var request = new RestRequest($"/chats/user/{this.UserId}", Method.Get);
+        //        var request = new RestRequest($"/contacts", Method.Get);
         //        var response = await restClient.ExecuteAsync<List<ContactDto>>(request);
         //        if(response.IsSuccessStatusCode && response.Data != null)
         //        {
@@ -133,9 +132,12 @@ namespace RestApi
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.SavedUserId = 0;
+            Properties.Settings.Default.SavedToken = "";
+            Properties.Settings.Default.Save();
             MainWindow Logins = new MainWindow();
             Logins.Show();
-            Close();
+            this.Close();
         }
         private async void DeleteContact()
         {

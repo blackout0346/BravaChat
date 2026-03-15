@@ -1,8 +1,5 @@
 ﻿using RestSharp;
-using RestSharp;
 using System;
-using System;
-using System.Collections.Generic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -10,9 +7,13 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using static RestApi.authification;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
+using UserControl = System.Windows.Controls.UserControl;
 namespace RestApi
 {
     /// <summary>
@@ -23,7 +24,9 @@ namespace RestApi
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         private int Myid;
         private int ChatId;
-        public int MessageId;
+        private int currentEditMessageId = 0;
+        private int currentReplyMessageId = 0;
+
         private DispatcherTimer dispatcherTimer;
         public class MessageItem
         {
@@ -38,10 +41,13 @@ namespace RestApi
             public string msg { get; set; }
             [JsonPropertyName("SendDate")]
             public string senddate { get; set; }
-            public HorizontalAlignment alignment { get; set; }
+            //public HorizontalAlignment alignment { get; set; }
             public SolidColorBrush bubbleColor { get; set; }
-            [JsonPropertyName("MessageId")]
+            [JsonPropertyName("Id")]
             public int messageId { get; set; }
+            [JsonPropertyName("EditedAt")]
+            public string EditedAt { get; set; }
+            public bool IsMyMessage {  get; set; }
         }
         
         public UserControl1(int myId, int chatId)
@@ -79,6 +85,8 @@ namespace RestApi
                             //    m.alignment = HorizontalAlignment.Left;
                             //    m.bubbleColor = new SolidColorBrush(Colors.AliceBlue);
                             //}
+                            m.IsMyMessage = (m.SenderId == Myid);
+
                             MessagesList.Items.Add(m);
                         }
                         if (MessagesList.Items.Count > 0)
@@ -103,6 +111,7 @@ namespace RestApi
                 message = InputMsg.Text,
                 replyId = 0,
                 forwardId = 0
+                
             };
             RestRequest restRequest = new RestRequest("/users/messages", Method.Post);
             restRequest.AddJsonBody(messages);
@@ -110,6 +119,7 @@ namespace RestApi
             if (response.IsSuccessStatusCode)
             {
                 InputMsg.Clear();
+                currentReplyMessageId = 0;
                 LoadMessages();
             }
             else
@@ -117,41 +127,145 @@ namespace RestApi
                 MessageBox.Show($"Ошибка: {response.StatusCode}\nОтвет сервера: {response.Content}");
             }
         }
-        private async void EditMessage()
+        private MessageItem GetSelectedMessage(object sender)
         {
+            if(sender is MenuItem menuItem)
+            {
+               if(menuItem.DataContext is MessageItem message)
+                {
+                    return message;
+                }
+            }
+            return null;
+        }
+        private async void EditMessage(int messageId)
+        {
+            string newText = InputMsg.Text;
+            string editTime = $"Изменено {DateTime.UtcNow:HH:mm}";
+            var itemToUpdate = MessagesList.Items.Cast<MessageItem>().FirstOrDefault(m => m.messageId == messageId);
+            if (itemToUpdate != null)
+            {
+                itemToUpdate.msg = newText;
+                itemToUpdate.senddate = editTime;
+                MessagesList.Items.Refresh();
+            }
 
+            RestRequest editRequest = new RestRequest($"/message/{messageId}/edit", Method.Put);
+            editRequest.AddJsonBody(new { message = InputMsg.Text, sendDate = editTime});
 
-          
-            RestRequest editRequest = new RestRequest($"/message/{MessageId}/edit", Method.Put);
-            var response = await restClient.ExecuteAsync<MessageItem>(editRequest);
-            MessageId = response.Data.messageId;
+            var response = await restClient.ExecuteAsync(editRequest);
+     
             if (response.IsSuccessStatusCode)
             {
-              var message = response.Data;
-              var edit = new MessageItem()
-              {
-                    msg = message.ToString()
-              };
+                HideActionPanel();
+                
+            }
+            else
+            {
+                LoadMessages();
             }
         }
-        private async void DeleteText()
+        private async void DeleteText(int messageId)
         {
-            RestRequest deleteRequest = new RestRequest($"/message/{MessageId}/delete", Method.Delete);
-            var response = await restClient.ExecuteAsync<MessageItem>(deleteRequest);
+         
+            RestRequest deleteRequest = new RestRequest($"/message/{messageId}/delete", Method.Delete);
+            string token = Properties.Settings.Default.SavedToken;
+            deleteRequest.AddHeader("Authorization", "Bearer " + token);
+            var response = await restClient.ExecuteAsync(deleteRequest);
             if (response.IsSuccessStatusCode)
             {
-                MessageId = response.Data.messageId;
-                MessagesList.Items.Remove(response.Data.msg);
+                LoadMessages();
             }
         }
 
         private void sendMessage_Click(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(InputMsg.Text))
+            if(string.IsNullOrWhiteSpace(InputMsg.Text) )
             {
-                SetMessage();
+                return;
             }
-          
+            if(currentEditMessageId !=0)
+            {
+                EditMessage(currentEditMessageId);
+            }
+            else
+            {
+                
+                SetMessage();
+                HideActionPanel();
+            }
+        
+        }
+        private void answer_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = GetSelectedMessage(sender);
+            if (msg == null)
+            {
+                return;
+            }
+            currentReplyMessageId = msg.messageId;
+            currentEditMessageId = 0;
+            InputMsg.Clear();
+            ShowActionPanel($"Ответить от {msg.login}", msg.msg, MaterialDesignThemes.Wpf.PackIconKind.Reply);
+            
+        }
+
+        private void edit_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = GetSelectedMessage(sender);
+            if (msg == null || msg.SenderId !=Myid)
+            {
+              
+                return;
+            }
+
+            currentEditMessageId = msg.messageId;
+            currentReplyMessageId = 0;
+            InputMsg.Text = msg.msg;
+            ShowActionPanel($"Редактировать", msg.msg, MaterialDesignThemes.Wpf.PackIconKind.Pencil);
+            InputMsg.Focus();
+        }
+
+        private void forward_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = GetSelectedMessage(sender);
+            if (msg == null)
+            {
+                return;
+            }
+            MessageBox.Show($"Переслать...{msg.messageId}");
+        }
+
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            var msg = GetSelectedMessage(sender);
+            if(msg == null)
+            {
+                return;
+            }
+            DeleteText(msg.messageId);
+        }
+        private void ShowActionPanel(string title, string text, MaterialDesignThemes.Wpf.PackIconKind icon)
+        {
+            ActionTitle.Text = title;
+            ActionText.Text = text.Replace("\n", " ").Replace("\r", "");
+            ActionIcon.Kind = icon;
+            ActionPanel.Visibility = Visibility.Visible;
+            ActionText.Visibility = Visibility.Visible;
+            ActionIcon.Visibility = Visibility.Visible;
+        }
+        private void HideActionPanel()
+        {
+            ActionIcon.Visibility = Visibility.Collapsed;
+            ActionPanel.Visibility = Visibility.Collapsed;
+            ActionText.Visibility = Visibility.Collapsed;
+            currentEditMessageId = 0;
+            currentReplyMessageId= 0;
+            InputMsg.Clear();
+        }
+        private void cancel_Click(object sender, RoutedEventArgs e)
+        {
+            HideActionPanel();
         }
     }
 }

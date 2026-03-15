@@ -129,11 +129,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataStorage.cpp" />
+    <ClCompile Include="GeneratorToken.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Route.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStorage.h" />
+    <ClInclude Include="GeneratorToken.h" />
     <ClInclude Include="Route.h" />
   </ItemGroup>
   <ItemGroup>

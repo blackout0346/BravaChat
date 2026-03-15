@@ -29,7 +29,7 @@
         <Label Content="Номер телефона" Grid.Row="2" FontStyle="Italic" Margin="0,57,0,10" Grid.RowSpan="2" ></Label>
         <Label Content="Почта" Grid.Row="3" FontStyle="Italic" Margin="0,56,0,10" Grid.RowSpan="2" ></Label>
         <TextBox x:Name="inputName" Grid.Column="0" Grid.Row="1" Margin="18" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="inputPassword" Grid.Column="0" Grid.Row="2" Margin="18" Grid.ColumnSpan="2" />
+        <PasswordBox x:Name="inputPassword" Grid.Column="0" Grid.Row="2" Margin="18" Grid.ColumnSpan="2" />
         <TextBox x:Name="inputNumber" Grid.Column="0" Grid.Row="3" Margin="18" Grid.ColumnSpan="2"/>
         <TextBox x:Name="inputEmail" Grid.Column="0" Grid.Row="4" Margin="18" Grid.ColumnSpan="2" />
         <Button x:Name="click" Grid.Row="5" Grid.Column="1" Click="click_Click" Content="Зарегистрироваться" Background="#80C8ED" Grid.RowSpan="4" Height="auto"  />
