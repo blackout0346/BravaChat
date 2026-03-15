@@ -249,7 +249,6 @@ void Route::UsersRoute()
             string token = GT.generateToken();
             string login = x["Login"].s();
             string Password = x["Password"].s();
-      
             string NumberPhone = x["NumberPhone"].s();
             auto result = db.SelectLogin(login, Password, NumberPhone);
             if (result.keys().empty())

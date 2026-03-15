@@ -16,8 +16,8 @@ namespace RestApi
     public partial class MainWindow : Window
     {
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
-        string inputsName = null;
-        string inputsPassword = null;
+        private string inputsName = null;
+        private string inputsPassword = null;
         
         public class UserResponse
         {
@@ -36,7 +36,7 @@ namespace RestApi
             [JsonPropertyName("Password")]
             public string Password { get; set; }
             [JsonPropertyName("NumberPhone")]
-            public int NumberPhone {  get; set; }
+            public string NumberPhone {  get; set; }
         }
         public MainWindow()
         {
@@ -70,7 +70,7 @@ namespace RestApi
             {
                 Login = inputsName,
                 Password = inputsPassword,
-                NumberPhone = 0
+                NumberPhone = "0"
             };
        
                 RestRequest PostRequest = new RestRequest("/login", Method.Post);
