@@ -214,17 +214,23 @@ crow::json::wvalue DataStorage::SelectLogin(string login, string password, strin
 
 void DataStorage::DeleteMessage(int messageId)
 {
-	db.exec("BEGIN TRANSACTION");
-	SQLite::Statement updateRepliesQuery(db,
-		"UPDATE Message SET ReplyId = NULL WHERE replyId =?");
-	updateRepliesQuery.bind(1, messageId);
-	updateRepliesQuery.exec();
+	try {
+		db.exec("BEGIN TRANSACTION");
+		SQLite::Statement updateRepliesQuery(db,
+			"UPDATE Message SET ReplyId = NULL WHERE replyId =?");
+		updateRepliesQuery.bind(1, messageId);
+		updateRepliesQuery.exec();
 
-	SQLite::Statement deleteQuery(db,
-		"DELETE FROM Message WHERE Id = ?");
-	deleteQuery.bind(1, messageId);
-	deleteQuery.exec();
-	db.exec("COMMIT");
+		SQLite::Statement deleteQuery(db,
+			"DELETE FROM Message WHERE Id = ?");
+		deleteQuery.bind(1, messageId);
+		deleteQuery.exec();
+		db.exec("COMMIT");
+	}
+	catch (exception& e)
+	{
+		db.exec("ROLLBACK");
+	}
 }
 
 void DataStorage::InsertAuth(string login, string password, string email, string number, string photo, string token)
@@ -341,8 +347,9 @@ crow::json::wvalue DataStorage::GetMessages(int messageId)
 	}
 }
 
-crow::json::wvalue DataStorage::GetChatUser(int UserId)
+crow::json::wvalue DataStorage::GetChatUser(string token)
 {
+	int UserId = GetUserIdFromToken(token);
 	SQLite::Statement query(db,
 		"SELECT C.Id, C.name, C.isGroup FROM Chats AS C "
 		"INNER JOIN UserChat as UC ON UC.chatId = C.Id "
@@ -395,5 +402,42 @@ void DataStorage::UpdateUserToken(int userId, string token)
 	query.bind(1, token);
 	query.bind(2, userId);
 	query.exec();
+}
+
+bool DataStorage::isValidUser(int MessageId, int UserId)
+{
+	try {
+		SQLite::Statement query(db, " SELECT Id FROM Message WHERE UserId = ? AND Id = ?   ");
+		query.bind(1, UserId);
+		query.bind(2, MessageId);
+		while (query.executeStep())
+		{
+			return query.getColumn(0).getInt() >0;
+		}
+	}
+	catch (exception& e)
+	{
+		cout << e.what() << endl;
+	}
+	return false;
+}
+
+int DataStorage::GetUserIdFromToken(string token)
+{
+	try {
+		SQLite::Statement query(db, "SELECT Id FROM Users WHERE Token = ?  ");
+		query.bind(1, token);
+		if (query.executeStep())
+		{
+			return query.getColumn(0).getInt();
+		}
+	}
+	catch (exception& e)
+	{
+		cout << e.what() << endl;
+	}
+	
+	return -1;
+
 }
 

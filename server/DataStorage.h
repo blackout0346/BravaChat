@@ -31,7 +31,9 @@ public:
 	crow::json::wvalue setUserId(crow::json::wvalue user,int userId);
 	crow::json::wvalue SearchLogin( string search);
 	crow::json::wvalue GetMessages(int message);
-	crow::json::wvalue GetChatUser(int UserId);
+	crow::json::wvalue GetChatUser(string token);
 	void UpdateUserToken(int userId, string token);
+	bool isValidUser(int MessageId, int UserId);
+	int GetUserIdFromToken(string token);
 };
 

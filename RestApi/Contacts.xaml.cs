@@ -26,8 +26,6 @@ namespace RestApi
   
         RestClient restClient = new RestClient("http://127.0.0.1:18080");
         private int UserId;
- 
-        bool isclose = false;
         public class UserDto
         {
             [JsonPropertyName("Login")]
@@ -84,8 +82,9 @@ namespace RestApi
         private async Task ViewContact()
         {
 
-            RestRequest ContactRequest = new RestRequest($"/chats/user/{this.UserId}", Method.Get);
-
+            RestRequest ContactRequest = new RestRequest("/chats/my", Method.Get);
+            string token = Properties.Settings.Default.SavedToken;
+            ContactRequest.AddHeader("Authorization", "Bearer " + token);
             var ContactResponse = await restClient.ExecuteAsync<chatListResponse>(ContactRequest);
 
             if (ContactResponse.IsSuccessStatusCode && ContactResponse.Data?.Chats != null)
@@ -109,26 +108,6 @@ namespace RestApi
            
         }
 
-        //private async void GetContact()
-        //{
-        //    try
-        //    {
-        //        var request = new RestRequest($"/contacts", Method.Get);
-        //        var response = await restClient.ExecuteAsync<List<ContactDto>>(request);
-        //        if(response.IsSuccessStatusCode && response.Data != null)
-        //        {
-        //            BoxContact.Items.Clear();
-        //            foreach(var contactData in response.Data)
-        //            {
-        //                ItemContact item = new ItemContact(contactData.chatId, contactData.Login);
-        //                BoxContact.Items.Add(item);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //    }
-        //}
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -159,12 +138,6 @@ namespace RestApi
            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-          
-            //check();
-     
-        }
 
         private void AddFriend_Click(object sender, RoutedEventArgs e)
         {

@@ -52,10 +52,21 @@ void Route::MessageRoute()
             }
 
         });
-    CROW_ROUTE(app, "/message/<int>/delete").methods("DELETE"_method)([&](int messageId)
+    CROW_ROUTE(app, "/message/<int>/delete").methods("DELETE"_method)([&](const crow::request& req,int messageId)
         {
             try {
-
+                auto authheadler = req.get_header_value("Authorization");
+                string token = authheadler.substr(7);
+                int requestid = db.GetUserIdFromToken(token);
+                cout <<"VIEW HERE ERROR : " << authheadler << ":" << requestid << endl;
+                if (requestid == -1)
+                {
+                    return crow::response(401);
+                }
+                if (!db.isValidUser(messageId, requestid))
+                {
+                    return crow::response(403);
+                }
 
                 db.DeleteMessage(messageId);
                 crow::json::wvalue res;
@@ -65,7 +76,7 @@ void Route::MessageRoute()
             }
             catch (exception& e)
             {
-                db.db.exec("ROLLBACK");
+           
                 return crow::response(400, e.what());
 
             }
@@ -327,10 +338,15 @@ void Route::ChatRoute()
                 return crow::response(400, e.what());
             }
         });
-    CROW_ROUTE(app, "/chats/user/<int>")([&](int userId) {
+    CROW_ROUTE(app, "/chats/my")([&](const crow::request& req) {
         try {
-            auto result= db.GetChatUser(userId);
-
+            auto authheadler = req.get_header_value("Authorization");
+            string token = authheadler.substr(7);
+            auto result= db.GetChatUser(token);
+            if (result.t() == crow::json::type::Null)
+            {
+                return crow::response(401);
+            }
             return crow::response(200, result);
         }
         catch (std::exception& e) {
