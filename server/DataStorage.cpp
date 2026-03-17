@@ -309,11 +309,12 @@ crow::json::wvalue DataStorage::setUserId(crow::json::wvalue users, int userId)
 
 }
 
-crow::json::wvalue DataStorage::SearchLogin( string search)
+crow::json::wvalue DataStorage::SearchLogin( string search ,int myId)
 {
 	vector<crow::json::wvalue> users;
-	SQLite::Statement query(db, "SELECT Id, Login FROM Users WHERE Login LIKE ? LIMIT 20");
+	SQLite::Statement query(db, "SELECT Id, Login FROM Users WHERE Login LIKE ? AND Id != ?");
 	query.bind(1, "%" + search + "%");
+	query.bind(2, myId);
 
 	while (query.executeStep())
 	{

@@ -52,12 +52,50 @@
             </Grid>
         </materialDesign:DrawerHost.LeftDrawerContent>
         
-<Grid>
+        
+        <materialDesign:DrawerHost.RightDrawerContent>
+
+            <Grid  Width="300" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" >
+                    </ColumnDefinition>
+                    <ColumnDefinition >
+                    </ColumnDefinition>
+                    <ColumnDefinition >
+                    </ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    <RowDefinition Height="auto">
+                    </RowDefinition>
+                    <RowDefinition >
+                    </RowDefinition>
+                </Grid.RowDefinitions>
+            
+                <Rectangle  Grid.ColumnSpan="3" Width="auto" Height="50" Fill="#FF6CBEE8" ></Rectangle>
+                <Label x:Name="UserFriend" Content="UserName" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" Foreground="White" Background="#FF6CBEE8" Width="auto" Padding="10"  ></Label>
+                <ListBox x:Name="ViewUsers"  Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Background="Wheat" ></ListBox>
+                <Button x:Name="ClosePanelprofile" Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                       Style="{StaticResource MaterialDesignFlatButton}"
+                       Grid.Column="3" Grid.Row="0"  Width="50" Padding="0,5,20,10" >
+
+
+                    <Image Source="/ButtonPanel.png" ></Image>
+
+                </Button>
+            </Grid>
+        </materialDesign:DrawerHost.RightDrawerContent>
+
+        
+        
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400">
             </ColumnDefinition>
             <ColumnDefinition Width="*">
             </ColumnDefinition>
+            
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -69,8 +107,12 @@
                 <ImageBrush ImageSource="/ButtonPanel.png"/>
             </Button.Background>
         </Button>
-      
-        <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged" Width="auto"></ListBox>
+            <Button x:Name="buttonPanelProfile" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"  CommandParameter ="{x:Static Dock.Right}"  Grid.Column="1" Visibility="Collapsed"  Width="30" Height="40" Margin="833,5,37,5"  >
+                <Button.Background>
+                    <ImageBrush ImageSource="/ButtonPanel.png"/>
+                </Button.Background>
+            </Button>
+            <ListBox x:Name="BoxContact" Grid.Row="1" SelectionChanged="BoxContact_SelectionChanged" Width="auto"></ListBox>
          
         <ContentControl x:Name="ChatDisplay" Grid.Column="1" Grid.Row="1" ></ContentControl>
             <ContentControl x:Name="Panel" Grid.Column="0" Grid.Row="1"  ></ContentControl>

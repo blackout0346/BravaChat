@@ -53,7 +53,9 @@ namespace RestApi
             if (string.IsNullOrEmpty(SearchInput)) return;
             try
             {
+                string token = Properties.Settings.Default.SavedToken;
                 RestRequest request = new RestRequest($"/users/search/{SearchInput}", Method.Get);
+                request.AddHeader("Authorization", "Bearer " + token);
                 var response = await restClient.ExecuteAsync<List<ViewUsers>>(request);
                 if (response.IsSuccessStatusCode)
                 {
@@ -61,12 +63,17 @@ namespace RestApi
                     foreach (var item in response.Data)
                     {
                         if (item.Id == MyId) continue;
+                     
                         AddItemUser addItemUser = new AddItemUser(item.Id, item.login);
                         addItemUser.OnaddUserClicked += async (PartnerId) =>
                         {
                             await AddFriend(PartnerId);
+                           
                         };
-
+                        if (MyId == addItemUser.PartnerId)
+                        {
+                            continue;
+                        }
                         ListUsers.Items.Add(addItemUser);
                     }
                 }
@@ -85,6 +92,7 @@ namespace RestApi
             var request = new RestRequest("/contacts/add", Method.Post);
             request.AddJsonBody(new { userId1 = MyId, userId2 = partnerId });
             var response = await restClient.ExecuteAsync(request);
+           
             if (response.IsSuccessStatusCode)
             {
                 MessageBox.Show("контакт добавлен!");

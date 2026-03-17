@@ -48,7 +48,7 @@ void Route::MessageRoute()
             catch (exception& e)
             {
                 return crow::response(400, e.what());
-                cout << "Error /users/messages/chat/<int>: " << e.what() << endl;
+                cout << "Error /users/messages/chat/: " << e.what() << endl;
             }
 
         });
@@ -292,16 +292,30 @@ void Route::UsersRoute()
         }
 
         });
-    CROW_ROUTE(app, "/users/search/<string>")([&](string searchTerm) {
+    CROW_ROUTE(app, "/users/search/<string>")([&](const crow::request& req, string searchTerm) {
         try
         {
 
-       
-            auto result = db.SearchLogin(searchTerm);
+            auto authHeader = req.get_header_value("Authorization");
+    
+            if (authHeader.empty() || authHeader.length() < 7)
+            {
+                cout << "!!! [DEBUG] Low/Empty Auth Header: [" << authHeader << "]" << endl;
+                cout << "!!! [DEBUG] Length: " << authHeader.length() << endl;
+                return crow::response(401);
+            }
+            string token = authHeader.substr(7);
+            int myId = db.GetUserIdFromToken(token);
+            if (myId == -1) {
+                cout<<"ID" << myId << endl;
+                return crow::response(401);
+            }
+            auto result = db.SearchLogin(searchTerm, myId);
+          
             return crow::response(200, result);
         }
         catch (exception& e) {
-            return crow::response(400, "invalid login");
+            return crow::response(400, e.what());
         }
 
     });

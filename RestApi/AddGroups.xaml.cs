@@ -50,7 +50,7 @@ namespace RestApi
         {
             InitializeComponent();
             MyId = myId;
-            search.TextChanged += (s, e) => GetUsersFromDB();
+            search.TextChanged += (s, e) => FriendsFromDB();
 
             {
             accept.Click += accept_Click;
@@ -58,19 +58,21 @@ namespace RestApi
 
 
         }
-        private async void GetUsersFromDB()
+        private async void FriendsFromDB()
         {
             if (string.IsNullOrEmpty(search.Text)) return;
             try
             {
+                string token = Properties.Settings.Default.SavedToken;
                 RestRequest request = new RestRequest($"/users/search/{search.Text}", Method.Get);
+                request.AddHeader("Authorization", "Bearer " + token);
                 var response = await restClient.ExecuteAsync<List<ViewUsers>>(request);
                 if (response.IsSuccessStatusCode && response.Data != null)
                 {
                     ListUsers.Items.Clear();
                     foreach (var item in response.Data)
                     {
-                        if (item.Id == MyId) continue;
+                       
                         ItemInGroups addItemGroups = new ItemInGroups(item.Id, item.login);
                         addItemGroups.OnUserChecked += (PartnerId) =>
                         {
@@ -114,10 +116,7 @@ namespace RestApi
             {
                 MessageBox.Show("Группа успешно создана!");
             }
-            else
-            {
-                //MessageBox.Show($"ошибка{resource.Content}");
-            }
+            
         }
 
         private void accept_Click(object sender, RoutedEventArgs e)

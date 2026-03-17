@@ -95,8 +95,9 @@ namespace RestApi
                     {
                         ItemContact itemContact = new ItemContact(contactData.chatId, contactData.Login);
                         BoxContact.Items.Add(itemContact);
+                        
                     }
-               
+                    
             }
             else
             {
@@ -128,12 +129,15 @@ namespace RestApi
 
         private void BoxContact_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-       
+            ContactDto login = new ContactDto();
+
             if (BoxContact.SelectedItem is ItemContact item)
             {
                 int chatId = item.chatId;
                 UserControl1 chat = new UserControl1(this.UserId, chatId);
                 ChatDisplay.Content = chat;
+                buttonPanelProfile.Visibility = Visibility.Visible;
+                UserFriend.Content = item.UserName.Content;
             }
            
         }

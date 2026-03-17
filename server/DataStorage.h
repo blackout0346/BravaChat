@@ -29,7 +29,7 @@ public:
 	void editMessage(int  messageId, string message);
 	string getDateTime();
 	crow::json::wvalue setUserId(crow::json::wvalue user,int userId);
-	crow::json::wvalue SearchLogin( string search);
+	crow::json::wvalue SearchLogin( string search, int myId);
 	crow::json::wvalue GetMessages(int message);
 	crow::json::wvalue GetChatUser(string token);
 	void UpdateUserToken(int userId, string token);

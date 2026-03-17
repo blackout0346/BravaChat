@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Content="Добавить друга" Grid.Row="0" Grid.ColumnSpan="2" Background="#FF6CBEE8"></Label>
-        <TextBox x:Name="search" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,74,100,46" />
+        <TextBox x:Name="search" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,74,100,29" />
         <TextBlock Text="Введите друга..." IsHitTestVisible="False" Foreground="Gray" Margin="20,74,83,46"  >
             <TextBlock.Style >
                 <Style TargetType="TextBlock">
